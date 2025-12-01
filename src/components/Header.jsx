@@ -49,16 +49,14 @@ export default function Header() {
 
   return (
     <header className="backdrop-blur-xl bg-white/80 shadow-sm sticky top-0 z-50 border-b">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 py-1 flex justify-between items-center">
 
-        {/* LOGO */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <img
-            src={logo}
-            alt="Logo"
-            className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-          />
-        </Link>
+       <img
+  src={logo}
+  alt="Logo"
+  className="h-28 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
+/>
+
 
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-10">
