@@ -18,7 +18,7 @@ export default function DashboardHeader({
   const { user } = useSelector((state) => state.auth);
   
 
-  const [logoutUser] = useLogoutUserMutation();
+  const [logoutUser,{isSuccess}] = useLogoutUserMutation();
 
   const handleLogout = async () => {
     try {
@@ -30,6 +30,8 @@ export default function DashboardHeader({
     } catch (err) {
       console.log(err);
       toast.error("Failed to logout");
+      navigate("/")
+      
     }
   };
 
