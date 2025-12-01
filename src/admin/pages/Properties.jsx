@@ -586,7 +586,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   Plus,
@@ -611,6 +611,12 @@ import {
 } from "../../Bothfeatures/features2/api/propertyapi";
 
 export default function Properties() {
+  // Password Update State
+  const [passwordData, setPasswordData] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
 
@@ -714,7 +720,7 @@ export default function Properties() {
         console.log("ower")
         refetchAllBranchOwner?.();
       } else if (user.role === "branch-manager") {
-         console.log("branch-manager")
+        console.log("branch-manager")
         refetchAllBranch?.();
         refetchBranchManagerData?.();
       }
@@ -776,11 +782,11 @@ export default function Properties() {
         previewImages: [],
       });
 
-     if (user?.role === "owner") {
+      if (user?.role === "owner") {
         console.log("ower")
         refetchAllBranchOwner?.();
       } else if (user.role === "branch-manager") {
-         console.log("branch-manager")
+        console.log("branch-manager")
         refetchAllBranch?.();
         refetchBranchManagerData?.();
       }
@@ -811,260 +817,272 @@ export default function Properties() {
       toast.error(err?.data?.message || "Failed to delete property.");
     }
   };
+  const handlePasswordUpdate = () => {
+    console.log("password ")
+  }
 
   return (
     <div className="space-y-6">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 bg-white/40 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div>
-          <h1 className="text-[#1e3a5f] text-3xl font-bold tracking-tight">
-            Property Management
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">Manage your PG properties with ease & clarity</p>
-        </div>
+      {
+        branchmanagerdata?.branch?.pwdchanged==false ?
+         <Navigate to="/admin/change-password" replace />
+          : <>
+            {/* HEADER */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 bg-white/40 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div>
+                <h1 className="text-[#1e3a5f] text-3xl font-bold tracking-tight">
+                  Property Management
+                </h1>
+                <p className="text-gray-500 text-sm mt-1">Manage your PG properties with ease & clarity</p>
+              </div>
 
-        <div className="flex gap-4">
-          {user?.role === "owner" && (
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white
+              <div className="flex gap-4">
+                {user?.role === "owner" && (
+                  <button
+                    onClick={() => setShowAddModal(true)}
+                    className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white
                    bg-gradient-to-r from-[#ff6b35] to-[#ff8c4a]
                    shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
-            >
-              <Plus size={18} />
-              Add Property
-            </button>
-          )}
+                  >
+                    <Plus size={18} />
+                    Add Property
+                  </button>
+                )}
 
-          {user?.role === "branch-manager" && (
-            <button
-              onClick={() => navigate('/admin/addroom')}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white
+                {user?.role === "branch-manager" && (
+                  <button
+                    onClick={() => navigate('/admin/addroom')}
+                    className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white
                    bg-gradient-to-r from-[#1e3a5f] to-[#274a75]
                    shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
-            >
-              <Plus size={18} />
-              Add Room
-            </button>
-          )}
-        </div>
-      </div>
+                  >
+                    <Plus size={18} />
+                    Add Room
+                  </button>
+                )}
+              </div>
+            </div>
 
-      {/* PROPERTIES GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {/* Loading skeleton when queries are fetching */}
-        {(loadingAllBranch || loadingAllBranchOwner || loadingBranchManagerData) && (
-          <div className="col-span-3 flex justify-center items-center p-10">
-            <Loader2 className="w-12 h-12 animate-spin text-gray-400" />
-          </div>
-        )}
+            {/* PROPERTIES GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+              {/* Loading skeleton when queries are fetching */}
+              {(loadingAllBranch || loadingAllBranchOwner || loadingBranchManagerData) && (
+                <div className="col-span-3 flex justify-center items-center p-10">
+                  <Loader2 className="w-12 h-12 animate-spin text-gray-400" />
+                </div>
+              )}
 
-        {branchfetched?.length > 0 ? (
-          branchfetched.map((property) => {
-            const occupancyRate = getOccupancyRate(property.occupiedRoom?.length, property.totalBeds);
-            return (
-              <div
-                key={property._id}
-                className="bg-white rounded-3xl shadow-lg border hover:shadow-2xl transition-all duration-300 overflow-hidden"
-              >
-                <div className="relative h-56">
-                  <img src={property.Propertyphoto} className="w-full h-full object-cover rounded-t-3xl" />
-
-                  {!property.branchmanager ? (
-                    <button
-                      onClick={() => handleAppointManager(property._id)}
-                      className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-xl shadow-md flex items-center gap-2 text-sm"
+              {branchfetched?.length > 0 ? (
+                branchfetched.map((property) => {
+                  const occupancyRate = getOccupancyRate(property.occupiedRoom?.length, property.totalBeds);
+                  return (
+                    <div
+                      key={property._id}
+                      className="bg-white rounded-3xl shadow-lg border hover:shadow-2xl transition-all duration-300 overflow-hidden"
                     >
-                      <UserPlus size={16} /> Appoint Manager
-                    </button>
-                  ) : (
-                    <button className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-xl shadow-md flex items-center gap-2 text-sm">
-                      <UserPlus size={16} /> {property.branchmanager.name}
-                    </button>
-                  )}
+                      <div className="relative h-56">
+                        <img src={property.Propertyphoto} className="w-full h-full object-cover rounded-t-3xl" />
 
-                  <div className={`absolute top-4 right-4 px-4 py-1 rounded-full text-sm font-medium shadow-md ${getStatusColor(property.vacancy)}`}>
-                    {vaccalclate(property.totalBeds, property.occupiedRoom?.length)} Vacant
-                  </div>
-                </div>
+                        {!property.branchmanager ? (
+                          <button
+                            onClick={() => handleAppointManager(property._id)}
+                            className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-xl shadow-md flex items-center gap-2 text-sm"
+                          >
+                            <UserPlus size={16} /> Appoint Manager
+                          </button>
+                        ) : (
+                          <button className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-xl shadow-md flex items-center gap-2 text-sm">
+                            <UserPlus size={16} /> {property.branchmanager.name}
+                          </button>
+                        )}
 
-                <div className="p-6">
-                  <h3 className="text-2xl font-semibold text-[#1e3a5f] mb-2 tracking-tight">{property.name}</h3>
+                        <div className={`absolute top-4 right-4 px-4 py-1 rounded-full text-sm font-medium shadow-md ${getStatusColor(property.vacancy)}`}>
+                          {vaccalclate(property.totalBeds, property.occupiedRoom?.length)} Vacant
+                        </div>
+                      </div>
 
-                  <div className="flex items-center gap-2 text-gray-600 text-sm mb-5">
-                    <MapPin size={18} className="text-gray-500" />
-                    <span className="truncate">{property.address}</span>
-                  </div>
+                      <div className="p-6">
+                        <h3 className="text-2xl font-semibold text-[#1e3a5f] mb-2 tracking-tight">{property.name}</h3>
 
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center p-4 bg-gray-100 rounded-2xl shadow-inner">
-                      <BedDouble size={20} className="mx-auto text-gray-600 mb-1" />
-                      <p className="text-sm text-gray-600">Beds</p>
-                      <p className="text-lg font-semibold text-[#1e3a5f]">{property.totalBeds}</p>
-                    </div>
+                        <div className="flex items-center gap-2 text-gray-600 text-sm mb-5">
+                          <MapPin size={18} className="text-gray-500" />
+                          <span className="truncate">{property.address}</span>
+                        </div>
 
-                    <div className="text-center p-4 bg-gray-100 rounded-2xl shadow-inner">
-                      <Users size={20} className="mx-auto text-gray-600 mb-1" />
-                      <p className="text-sm text-gray-600">Occupied</p>
-                      <p className="text-lg font-semibold text-[#1e3a5f]">{(property?.occupiedRoom?.length || 0)} / {property.totalBeds}</p>
-                    </div>
+                        <div className="grid grid-cols-3 gap-4 mb-6">
+                          <div className="text-center p-4 bg-gray-100 rounded-2xl shadow-inner">
+                            <BedDouble size={20} className="mx-auto text-gray-600 mb-1" />
+                            <p className="text-sm text-gray-600">Beds</p>
+                            <p className="text-lg font-semibold text-[#1e3a5f]">{property.totalBeds}</p>
+                          </div>
 
-                    <div className="text-center p-4 bg-gray-100 rounded-2xl shadow-inner">
-                      <p className="text-sm text-gray-600">Occupancy</p>
-                      <p className="text-lg font-semibold text-orange-600">{occupancyRate}%</p>
-                    </div>
-                  </div>
+                          <div className="text-center p-4 bg-gray-100 rounded-2xl shadow-inner">
+                            <Users size={20} className="mx-auto text-gray-600 mb-1" />
+                            <p className="text-sm text-gray-600">Occupied</p>
+                            <p className="text-lg font-semibold text-[#1e3a5f]">{(property?.occupiedRoom?.length || 0)} / {property.totalBeds}</p>
+                          </div>
 
-                  <div className="flex gap-3">
-                    <button className="flex-1 bg-[#1e3a5f] text-white py-2.5 rounded-2xl flex items-center justify-center gap-2 font-medium hover:bg-[#162f4b] transition-all">
-                      <Eye size={18} /> View Layout
-                    </button>
+                          <div className="text-center p-4 bg-gray-100 rounded-2xl shadow-inner">
+                            <p className="text-sm text-gray-600">Occupancy</p>
+                            <p className="text-lg font-semibold text-orange-600">{occupancyRate}%</p>
+                          </div>
+                        </div>
 
-                    {user?.role !== "branch-manager" && (
-                      <>
-                        <button className="p-3 border rounded-2xl hover:bg-gray-100 transition">
-                          <Edit size={18} />
-                        </button>
+                        <div className="flex gap-3">
+                          <button className="flex-1 bg-[#1e3a5f] text-white py-2.5 rounded-2xl flex items-center justify-center gap-2 font-medium hover:bg-[#162f4b] transition-all">
+                            <Eye size={18} /> View Layout
+                          </button>
 
-                        <button
-                          onClick={() => DeletingProperty(property?.occupiedRoom?.length, property?._id)}
-                          className="p-3 border border-red-400 rounded-2xl hover:bg-red-50 transition flex items-center justify-center"
-                        >
-                          {deletingProperty ? (
-                            <Loader2 className="w-5 h-5 animate-spin text-red-500" />
-                          ) : (
-                            <Trash2 className="text-red-500" size={18} />
+                          {user?.role !== "branch-manager" && (
+                            <>
+                              <button className="p-3 border rounded-2xl hover:bg-gray-100 transition">
+                                <Edit size={18} />
+                              </button>
+
+                              <button
+                                onClick={() => DeletingProperty(property?.occupiedRoom?.length, property?._id)}
+                                className="p-3 border border-red-400 rounded-2xl hover:bg-red-50 transition flex items-center justify-center"
+                              >
+                                {deletingProperty ? (
+                                  <Loader2 className="w-5 h-5 animate-spin text-red-500" />
+                                ) : (
+                                  <Trash2 className="text-red-500" size={18} />
+                                )}
+                              </button>
+                            </>
                           )}
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-gray-500 text-center col-span-3 p-8">
-            <p className="text-lg font-medium">No branches found.</p>
-            <p className="text-sm text-gray-400 mt-2">
-              You can add a new property using the <span className="font-semibold">Add Property</span> button.
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* ADD MANAGER MODAL */}
-      {addmanager && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-gray-200 animate-[fadeIn_0.25s_ease-out]">
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-semibold text-gray-800">Appoint Manager</h2>
-              <p className="text-sm text-gray-500 mt-1">Fill out the details to appoint a new manager.</p>
-            </div>
-
-            <form onSubmit={handleSaveManager} className="p-6 space-y-5">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Name</label>
-                <input type="text" name="name" placeholder="Enter manager name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" onChange={handleManagerChange} />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" placeholder="manager@example.com" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" onChange={handleManagerChange} />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Phone Number</label>
-                <input type="text" name="phone" placeholder="Enter phone number" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" onChange={handleManagerChange} />
-              </div>
-
-              <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setAddManager(false)} className="flex-1 border border-gray-300 text-gray-700 p-3 rounded-xl hover:bg-gray-100 transition-all font-medium">
-                  Cancel
-                </button>
-
-                <button type="submit" className="flex-1 bg-blue-600 text-white p-3 rounded-xl shadow-md hover:bg-blue-700 transition-all font-medium">
-                  {addingManager ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Save Manager"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ADD PROPERTY MODAL */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-3xl shadow-2xl border border-gray-200 animate-scaleIn max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b bg-gradient-to-r from-blue-600 to-blue-500 rounded-t-2xl">
-              <h2 className="text-2xl font-semibold text-white tracking-wide">Add New Property</h2>
-            </div>
-
-            <form onSubmit={handleSaveProperty} className="p-6 space-y-6">
-              <div>
-                <label className="text-sm font-medium text-gray-700">PG Name</label>
-                <input name="name" placeholder="Enter PG Name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.name} onChange={handlePropertyChange} required />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Address</label>
-                <input name="address" placeholder="Enter Full Address" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.address} onChange={handlePropertyChange} required />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">City</label>
-                  <input name="city" placeholder="City Name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.city} onChange={handlePropertyChange} required />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-gray-700">State</label>
-                  <input name="state" placeholder="State Name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.state} onChange={handlePropertyChange} required />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Pincode</label>
-                <input name="pincode" type="number" placeholder="Enter Pincode" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.pincode} onChange={handlePropertyChange} required />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Street Address</label>
-                <input name="streetAdress" placeholder="Street Address" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.streetAdress} onChange={handlePropertyChange} required />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Landmark</label>
-                <input name="landmark" placeholder="Nearest Landmark" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.landmark} onChange={handlePropertyChange} required />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">Upload Images</label>
-                <input type="file" multiple accept="image/*" className="w-full border border-gray-300 p-3 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500" onChange={(e) => {
-                  const files = Array.from(e.target.files);
-                  const previews = files.map((f) => URL.createObjectURL(f));
-                  setFormData((prev) => ({ ...prev, images: files, previewImages: previews }));
-                }} />
-                <div className="grid grid-cols-3 gap-4 mt-4">
-                  {formData.previewImages.map((img, i) => (
-                    <div key={i} className="relative">
-                      <img src={img} className="w-full h-28 rounded-xl object-cover shadow-md hover:scale-105 transition" />
+                        </div>
+                      </div>
                     </div>
-                  ))}
+                  );
+                })
+              ) : (
+                <div className="text-gray-500 text-center col-span-3 p-8">
+                  <p className="text-lg font-medium">No branches found.</p>
+                  <p className="text-sm text-gray-400 mt-2">
+                    You can add a new property using the <span className="font-semibold">Add Property</span> button.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* ADD MANAGER MODAL */}
+            {addmanager && (
+              <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl w-full max-w-md shadow-xl border border-gray-200 animate-[fadeIn_0.25s_ease-out]">
+                  <div className="p-6 border-b">
+                    <h2 className="text-xl font-semibold text-gray-800">Appoint Manager</h2>
+                    <p className="text-sm text-gray-500 mt-1">Fill out the details to appoint a new manager.</p>
+                  </div>
+
+                  <form onSubmit={handleSaveManager} className="p-6 space-y-5">
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Name</label>
+                      <input type="text" name="name" placeholder="Enter manager name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" onChange={handleManagerChange} />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Email</label>
+                      <input type="email" name="email" placeholder="manager@example.com" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" onChange={handleManagerChange} />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Phone Number</label>
+                      <input type="text" name="phone" placeholder="Enter phone number" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" onChange={handleManagerChange} />
+                    </div>
+
+                    <div className="flex gap-3 pt-2">
+                      <button type="button" onClick={() => setAddManager(false)} className="flex-1 border border-gray-300 text-gray-700 p-3 rounded-xl hover:bg-gray-100 transition-all font-medium">
+                        Cancel
+                      </button>
+
+                      <button type="submit" className="flex-1 bg-blue-600 text-white p-3 rounded-xl shadow-md hover:bg-blue-700 transition-all font-medium">
+                        {addingManager ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Save Manager"}
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
+            )}
 
-              <div className="flex gap-4 pt-4">
-                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 border p-3 rounded-xl font-medium hover:bg-gray-100 transition">Cancel</button>
+            {/* ADD PROPERTY MODAL */}
+            {showAddModal && (
+              <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl w-full max-w-3xl shadow-2xl border border-gray-200 animate-scaleIn max-h-[90vh] overflow-y-auto">
+                  <div className="p-6 border-b bg-gradient-to-r from-blue-600 to-blue-500 rounded-t-2xl">
+                    <h2 className="text-2xl font-semibold text-white tracking-wide">Add New Property</h2>
+                  </div>
 
-                <button type="submit" className="flex-1 bg-blue-600 text-white p-3 rounded-xl font-medium hover:bg-blue-700 transition shadow-md">
-                  {addingBranch ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Save Property"}
-                </button>
+                  <form onSubmit={handleSaveProperty} className="p-6 space-y-6">
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">PG Name</label>
+                      <input name="name" placeholder="Enter PG Name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.name} onChange={handlePropertyChange} required />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Address</label>
+                      <input name="address" placeholder="Enter Full Address" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.address} onChange={handlePropertyChange} required />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">City</label>
+                        <input name="city" placeholder="City Name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.city} onChange={handlePropertyChange} required />
+                      </div>
+
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">State</label>
+                        <input name="state" placeholder="State Name" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.state} onChange={handlePropertyChange} required />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Pincode</label>
+                      <input name="pincode" type="number" placeholder="Enter Pincode" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.pincode} onChange={handlePropertyChange} required />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Street Address</label>
+                      <input name="streetAdress" placeholder="Street Address" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.streetAdress} onChange={handlePropertyChange} required />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Landmark</label>
+                      <input name="landmark" placeholder="Nearest Landmark" className="w-full border border-gray-300 p-3 rounded-xl mt-1 focus:ring-2 focus:ring-blue-500" value={formData.landmark} onChange={handlePropertyChange} required />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">Upload Images</label>
+                      <input type="file" multiple accept="image/*" className="w-full border border-gray-300 p-3 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500" onChange={(e) => {
+                        const files = Array.from(e.target.files);
+                        const previews = files.map((f) => URL.createObjectURL(f));
+                        setFormData((prev) => ({ ...prev, images: files, previewImages: previews }));
+                      }} />
+                      <div className="grid grid-cols-3 gap-4 mt-4">
+                        {formData.previewImages.map((img, i) => (
+                          <div key={i} className="relative">
+                            <img src={img} className="w-full h-28 rounded-xl object-cover shadow-md hover:scale-105 transition" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4 pt-4">
+                      <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 border p-3 rounded-xl font-medium hover:bg-gray-100 transition">Cancel</button>
+
+                      <button type="submit" className="flex-1 bg-blue-600 text-white p-3 rounded-xl font-medium hover:bg-blue-700 transition shadow-md">
+                        {addingBranch ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Save Property"}
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+            )}
+
+
+          </>
+      }
     </div>
-  );
+  )
 }
+

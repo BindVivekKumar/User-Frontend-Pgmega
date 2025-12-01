@@ -19,6 +19,9 @@ import AddRoomForm from "./pages/c-xyz/addroom";
 import ShowRooms from "./pages/c-xyz/showallroom";
 import { AddHotelRoom } from "./pages/c-xyz/hotelroom";
 import EditRoomForm from "./pages/c-xyz/editpage";
+import Footer from "../components/Footer";
+
+import SetNewPassword from "./pages/resetaagerpassword";
 
 export default function AdminApp() {
   return (
@@ -47,11 +50,16 @@ export default function AdminApp() {
           {/* fallback */}
           <Route path="*" element={<Navigate to="properties" replace />} />
         </Route>
+        <Route path="change-password" element={<SetNewPassword />} />
+        
+
       </Route>
+     
 
       {/* PUBLIC AUTH ROUTES */}
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
     </Routes>
+    
   );
 }

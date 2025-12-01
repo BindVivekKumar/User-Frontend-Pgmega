@@ -29,7 +29,7 @@ const propertyApi = createApi({
                 url: `getalllbranchowner`
             })
         }),
-        
+
         getAllBranchbybranchId: builder.query({
             query: () => ({
                 url: `getbranch/bybranchMnager`
@@ -41,6 +41,13 @@ const propertyApi = createApi({
                 url: `createbranchmanager/${branchid}`,
                 method: 'POST',
                 body: managerData,
+            })
+        }),
+        changemanagerpass: builder.mutation({
+            query: (payload) => ({
+                url: `/branchmanager/passwordchange`,
+                method: 'put',
+                body: payload,
             })
         }),
         addRoom: builder.mutation({
@@ -62,7 +69,7 @@ const propertyApi = createApi({
                 method: 'Delete',
             })
         }),
-         addHotelRoom: builder.mutation({
+        addHotelRoom: builder.mutation({
             query: (dataToSend) => ({
                 url: `addhotelroom`,
                 method: 'POST',
@@ -80,17 +87,17 @@ const propertyApi = createApi({
         updateRoom: builder.mutation({
             query: ({ id, data }) => ({
                 url: `updateroom/${id}`,
-                method:"put",
-                body:data
+                method: "put",
+                body: data
             })
         }),
-         getRoomById: builder.query({
+        getRoomById: builder.query({
             query: (id) => ({
                 url: `getroombyid/${id}`
             })
         }),
 
-        
+
 
 
 
@@ -103,6 +110,7 @@ const propertyApi = createApi({
 
 export const {
     useDeletePropertyMutation,
+    useChangemanagerpassMutation,
     useGetAllBranchByOwnerQuery,
     useGetRoomByIdQuery,
     useUpdateRoomMutation,

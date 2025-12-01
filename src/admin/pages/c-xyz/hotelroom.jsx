@@ -76,7 +76,9 @@ export function AddHotelRoom() {
       formData.images.forEach((img) => img && dataToSend.append("images", img));
 
       await addHotelRoom(dataToSend).unwrap();
-      toast.success("Room added successfully!");
+     
+    toast.success("Room Will Be Listed after Verification")
+
       setFormData({
         branchId: "",
         roomNumber: "",
