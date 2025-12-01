@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { 
-  useAddRoomMutation, 
+import {
+  useAddRoomMutation,
   useGetAllBranchbybranchIdQuery,
   useGetAllRoomQuery      // 👈 FOR REFETCH
 } from "../../../Bothfeatures/features2/api/propertyapi";
@@ -77,7 +77,8 @@ function AddRoomForm() {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success("Room added successfully!", { id: "ROOM_ADD" });
+
+      toast.success("Room Will Be Listed after Verification")
       refetch();  // 🔥 auto refresh list
       navigate(-1);
     }
@@ -220,10 +221,9 @@ function AddRoomForm() {
         onClick={handleAddRoom}
         disabled={isLoading}
         className={`w-full mt-5 py-3 rounded-xl font-semibold text-lg transition-all shadow-md
-          ${
-            isLoading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-[#ff6b35] hover:bg-[#e55a2b] text-white"
+          ${isLoading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-[#ff6b35] hover:bg-[#e55a2b] text-white"
           }
         `}
       >

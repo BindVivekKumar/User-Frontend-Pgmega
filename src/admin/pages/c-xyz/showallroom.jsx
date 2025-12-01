@@ -49,6 +49,7 @@ function ShowRooms() {
   return (
     <>
       <Toaster position="top-right" />
+
       <div className="p-6 max-w-7xl mx-auto">
         <h1 className="text-3xl font-extrabold mb-6 text-gray-800 tracking-wide text-center">
           All Rooms
@@ -91,10 +92,29 @@ function ShowRooms() {
 
                 {/* Room Details */}
                 <div className="p-5">
-                  <h2 className="text-xl font-bold text-gray-900">
+                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
                     Room {room.roomNumber}
+
+                    {/* Publish Status */}
+                    {room?.toPublish?.status ? (
+                      <span className="px-3 py-1 bg-green-600 text-white text-xs rounded-full">
+                        Listed
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 bg-orange-500 text-white text-xs rounded-full">
+                        Under Verification
+                      </span>
+                    )}
                   </h2>
+
                   <p className="text-gray-600 mt-1 capitalize">{room.type} Room</p>
+
+                  {/* If Not Published, Show Banner */}
+                  {!room?.toPublish?.status && (
+                    <div className="mt-3 bg-yellow-100 text-yellow-700 text-sm p-2 rounded-lg">
+                      This room is under admin verification.It will take 24 hour
+                    </div>
+                  )}
 
                   {/* Facilities */}
                   <div className="mt-4">
