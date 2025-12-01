@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Menu, X, Building2 } from "lucide-react";
@@ -22,6 +22,7 @@ export default function DashboardHeader({
 
   const handleLogout = async () => {
     try {
+        localStorage.removeItem("user");
       await logoutUser().unwrap();
       dispatch(userLoggedout());
       localStorage.removeItem("user");
@@ -32,12 +33,24 @@ export default function DashboardHeader({
     catch (err) {
 
        navigate("/")
-      console.log(err);
+      console.log(isSuccess);
       toast.error("Failed to logout");
      
       
     }
   };
+
+
+ useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  console.log("storedUser:", storedUser);
+
+  if (!storedUser || !user) {
+    // Force redirect to login
+    window.location.href = "/";
+  }
+}, [user]);
+
 
   return (
     <header className="fixed top-0 left-0 right-0 h-16 bg-white/70 backdrop-blur-md border-b shadow-sm z-50 flex items-center justify-between px-4">
