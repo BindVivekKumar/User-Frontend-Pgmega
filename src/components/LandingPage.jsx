@@ -89,39 +89,38 @@ export default function LandingPage() {
             'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260)'
         }}
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 text-white px-4">
+        {/* TEXT INSIDE HERO */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
           <h2 className="text-4xl md:text-5xl font-bold mb-2">Find Your Perfect PG Near You</h2>
           <p className="text-xl mb-6">Safe, Comfortable & Affordable Accommodation</p>
+        </div>
+      </div>
 
-         <div
-  className="w-full max-w-3xl bg-white/90 backdrop-blur-md shadow-xl rounded-full p-3 border border-white/30
-             absolute left-1/2 -translate-x-1/2 -bottom-10"
->
-  <div className="relative flex gap-3 w-full">
-    <input
-      type="text"
-      placeholder="Search by location or name..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      onKeyPress={(e) => e.key === 'Enter' && handleFindPG()}
-      className="flex-1 px-5 py-4 rounded-full text-gray-900 bg-transparent focus:outline-none text-lg placeholder:text-lg"
-    />
+      {/* SEARCH BOX FLOATING HALF-OVERLAP */}
+      <div className="relative w-full flex justify-center -mt-14">
+        <div className="w-full max-w-3xl bg-white/90 backdrop-blur-md shadow-xl rounded-full p-3 border border-white/30">
 
-    <button
-      onClick={handleFindPG}
-      className="bg-blue-600 text-white px-8 py-4 rounded-full hover:bg-blue-700 transition font-medium text-lg"
-    >
-      Find
-    </button>
-  </div>
+          <div className="relative flex gap-3 w-full">
+            <input
+              type="text"
+              placeholder="Search by location or name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleFindPG()}
+              className="flex-1 px-5 py-4 rounded-full text-gray-900 bg-transparent focus:outline-none text-lg placeholder:text-lg"
+            />
 
-  {searchError && (
-    <p className="text-red-500 text-sm mt-2 text-center">{searchError}</p>
-  )}
-</div>
+            <button
+              onClick={handleFindPG}
+              className="bg-blue-600 text-white px-8 py-4 rounded-full hover:bg-blue-700 transition font-medium text-lg"
+            >
+              Find
+            </button>
+          </div>
 
-
-          
+          {searchError && (
+            <p className="text-red-500 text-sm mt-2 text-center">{searchError}</p>
+          )}
         </div>
       </div>
 
@@ -134,12 +133,13 @@ export default function LandingPage() {
             {pgData.length > 0 ? (
               pgData.map(pg => (
                 <div
-                  key={pg._id}
-                  onCl ick={() => navigate(`/pg/${pg._id}`)}
-                  className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
-                >
+  key={pg._id}
+  onClick={() => navigate(`/pg/${pg._id}`)}
+  className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+>
+
                   <div className="relative">
-                    <img src={pg?.roomImages?.[0]} alt={pg.name} className="h-40 w-full object-cover" />
+                    <img src={pg?.roomImages?.[0] ?? ""} alt={pg?.name ?? ""} className="h-40 w-full object-cover" />
                     <WishlistButton pg={pg} onAuthOpen={() => setIsAuthModalOpen(true)} />
                   </div>
 
