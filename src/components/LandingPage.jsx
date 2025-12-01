@@ -90,7 +90,7 @@ export default function LandingPage() {
         }}
       >
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 text-white px-4">
-          <h2 className="text-4xl md:text-5xl font-bold mb-2">Find Your Perfect PG Near You</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-2">Find Your Perfect Stay Near You</h2>
           <p className="text-xl mb-6">Safe, Comfortable & Affordable Accommodation</p>
 
           <div
@@ -195,7 +195,7 @@ export default function LandingPage() {
         ))
       ) : (
         <div className="col-span-full text-center py-12 text-gray-500 text-lg">
-          No PGs available
+          No Rooms available
         </div>
       )}
     </div>
