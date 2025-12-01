@@ -60,22 +60,40 @@ export default function Header() {
           />
         </Link>
 
-        {/* Add Property Button */}
-        {
-          !isAuthenticated?<> <button
-          onClick={() => navigate("/login")}
-          className="hidden md:flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200"
-        >
-          <Plus className="w-5 h-5" />
-          Add Your Property
-        </button></>:<></>
-        }
-       
-
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center gap-8">
+          <Link to="/" className="text-gray-700 hover:text-blue-600 font-semibold">
+            Home
+          </Link>
+          <Link to="/about" className="text-gray-700 hover:text-blue-600 font-semibold">
+            About
+          </Link>
+          <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-semibold">
+            Contact
+          </Link>
+        </nav>
 
-          {isAuthenticated ? (
+        {/* Desktop Right Side */}
+        <div className="hidden md:flex items-center space-x-6">
+          {!isAuthenticated ? (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200"
+              >
+                <Plus className="w-5 h-5" />
+                Add Your Property
+              </button>
+
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium shadow hover:shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2"
+              >
+                <User className="w-5 h-5" />
+                Sign In / Sign Up
+              </button>
+            </>
+          ) : (
             <div className="relative">
               {/* User Avatar */}
               <div
@@ -119,19 +137,14 @@ export default function Header() {
                 </div>
               )}
             </div>
-          ) : (
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium shadow hover:shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2"
-            >
-              <User className="w-5 h-5" />
-              Sign In / Sign Up
-            </button>
           )}
         </div>
 
-        {/* Mobile Menu Icon */}
-        <button className="md:hidden" onClick={() => setMobileMenu((p) => !p)}>
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden"
+          onClick={() => setMobileMenu((p) => !p)}
+        >
           <Menu className="w-7 h-7" />
         </button>
       </div>
@@ -140,17 +153,39 @@ export default function Header() {
       {mobileMenu && (
         <div className="md:hidden px-6 pb-4 space-y-4 animate-slideDown">
 
-          {/* Add Property (mobile) */}
+          {/* Mobile Nav Links */}
           <button
-            onClick={() => {
-              setMobileMenu(false);
-              navigate("/login");
-            }}
-            className="flex items-center gap-2 w-full py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
+            onClick={() => { setMobileMenu(false); navigate("/"); }}
+            className="block w-full text-left px-2 py-2 text-gray-700 font-medium"
           >
-            <Plus className="w-5 h-5" /> Add Your Property
+            Home
           </button>
 
+          <button
+            onClick={() => { setMobileMenu(false); navigate("/about"); }}
+            className="block w-full text-left px-2 py-2 text-gray-700 font-medium"
+          >
+            About
+          </button>
+
+          <button
+            onClick={() => { setMobileMenu(false); navigate("/contact"); }}
+            className="block w-full text-left px-2 py-2 text-gray-700 font-medium"
+          >
+            Contact
+          </button>
+
+          {/* Add Property */}
+          {!isAuthenticated && (
+            <button
+              onClick={() => { setMobileMenu(false); navigate("/login"); }}
+              className="flex items-center gap-2 w-full py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
+            >
+              <Plus className="w-5 h-5" /> Add Your Property
+            </button>
+          )}
+
+          {/* Authenticated mobile options */}
           {isAuthenticated ? (
             <>
               <button
