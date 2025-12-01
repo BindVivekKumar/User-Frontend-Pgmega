@@ -70,10 +70,16 @@ export default function Footer() {
             >
               Help Center
             </li>
-            <li className="cursor-pointer hover:opacity-100 duration-200">
+           <li
+              onClick={() => navigate("/faqs")}
+              className="cursor-pointer hover:opacity-100 duration-200"
+            >
               FAQs
             </li>
-            <li className="cursor-pointer hover:opacity-100 duration-200">
+            <li
+              onClick={() => navigate("/customersupport")}
+              className="cursor-pointer hover:opacity-100 duration-200"
+            >
               Customer Support
             </li>
           </ul>
@@ -85,15 +91,20 @@ export default function Footer() {
             Services
           </h2>
           <ul className="space-y-2 text-sm opacity-90">
-            <li className="cursor-pointer hover:opacity-100 duration-200">
-              PG Listings
-            </li>
-            <li className="cursor-pointer hover:opacity-100 duration-200">
-              Property Management
-            </li>
-            <li className="cursor-pointer hover:opacity-100 duration-200">
+            
+           
+
+       <li
+              onClick={() => navigate("/partnerwithroomgi")}
+              className="cursor-pointer hover:opacity-100 duration-200"
+            >
               Partner with Roomgi
             </li>
+            
+
+
+
+            
           </ul>
         </div>
 

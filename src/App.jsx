@@ -13,6 +13,9 @@ import PrivacyPolicy from "./components/privacypolicy";
 import TermsConditions from "./components/termsandcondition";
 import ShippingPolicy from "./components/shippingpolicy";
 import HelpCenter from "./components/HelpCenter.jsx";
+import FAQs from "./components/FAQs.jsx";
+import CustomerSupport from "./components/CustomerSupport.jsx";
+import PartnerWithRoomgi from "./components/PartnerWithRoomgi.jsx";
 
 import DashboardHeader from "./admin/header";
 import AdminApp from "./admin/AdminApp";
@@ -20,6 +23,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { hydrateUser } from "./Bothfeatures/features/authSlice";
 import ProtectedRoute from "./userprotectedroutes";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -79,8 +83,11 @@ function App() {
             <Route path="/termsandcondition" element={<TermsConditions />} />
             <Route path="/shippingpolicy" element={<ShippingPolicy />} />
             <Route path="/helpcenter" element={<HelpCenter />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/customersupport" element={<CustomerSupport />} />
+            <Route path="/partnerwithroomgi" element={<PartnerWithRoomgi />} />
           
-
+              
 
           {/* Admin Routes */}
           <Route path="/admin/*" element={<AdminApp />} />
