@@ -100,11 +100,11 @@ export default function LandingPage() {
   <div className="relative flex gap-2 w-full">
     <input
       type="text"
-      placeholder="Search your PG by name..."
+      placeholder="Search by neareast location / name..."
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       onKeyPress={(e) => e.key === 'Enter' && handleFindPG()}
-      className="flex-1 px-4 py-3 rounded-full text-gray-900 text-base bg-transparent focus:outline-none mt-0"
+      className="flex-1 px-4 py-4 rounded-full text-gray-900 text-base bg-transparent focus:outline-none mt-0"
     />
     <button
       onClick={handleFindPG}
@@ -124,7 +124,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* PG LIST */}
+{/* PG LIST */}
 {isLoading ? (
   <Loader />
 ) : (
@@ -145,8 +145,11 @@ export default function LandingPage() {
                 className="h-44 w-full object-cover rounded-t-2xl"
               />
 
-              {/* Prevent click bubbling */}
-              <div onClick={(e) => e.stopPropagation()} className="absolute top-3 right-3">
+              {/* Prevent click bubbling + Extra spacing added */}
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="absolute top-6 right-5"
+              >
                 <WishlistButton
                   pg={pg}
                   onAuthOpen={() => setIsAuthModalOpen(true)}
@@ -198,6 +201,8 @@ export default function LandingPage() {
     </div>
   </div>
 )}
+
+
 
 
       {/* POPULAR CITIES */}
