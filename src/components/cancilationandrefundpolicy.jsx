@@ -5,7 +5,7 @@ import Footer from "./Footer";
 
 
 export default function CancellationPolicy() {
-  const { user } = useSelector((state) => state.auth); // get user from redux
+  const { user, isAuthenticated } = useSelector((state) => state.auth); // get user from redux
   const role = user?.role; // default role if no user
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-16 px-5">
@@ -94,9 +94,8 @@ export default function CancellationPolicy() {
           © {new Date().getFullYear()} ROOMGI — All Rights Reserved.
         </p>
       </div>
-      {
-        role !== "user" ? <Footer /> : <></>
-      }
+      {(isAuthenticated && role !== "user") ? <Footer /> : <></>}
+
     </div>
   );
 }

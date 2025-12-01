@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 
 export default function ContactUs() {
-  const { user } = useSelector((state) => state.auth); // get user from redux
+  const { user,isAuthenticated } = useSelector((state) => state.auth); // get user from redux
   const role = user?.role; // default role if no user
   return (<>
     <div className="max-w-3xl mx-auto px-6 py-12">
@@ -86,9 +86,8 @@ export default function ContactUs() {
 
     </div>
 
-    {
-      role !== "user" ? <Footer /> : <></>
-    }</>
+         {(isAuthenticated && role !== "user") ? <Footer /> : <></>}
+    </>
 
   );
 }

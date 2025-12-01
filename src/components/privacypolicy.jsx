@@ -5,7 +5,7 @@ import  Footer  from "./Footer";
 
 
 export default function PrivacyPolicy() {
-    const { user } = useSelector((state) => state.auth); // get user from redux
+    const { user,isAuthenticated } = useSelector((state) => state.auth); // get user from redux
     const role = user?.role; // default role if no user
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white py-16 px-6">
@@ -62,9 +62,8 @@ export default function PrivacyPolicy() {
 
         </div>
       </div>
-       {
-                role!=="user"?<Footer/>:<></>
-              }
+            {(isAuthenticated && role !== "user") ? <Footer /> : <></>}
+       
     </div>
   );
 }

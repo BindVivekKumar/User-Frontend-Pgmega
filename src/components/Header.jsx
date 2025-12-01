@@ -61,13 +61,16 @@ export default function Header() {
         </Link>
 
         {/* Add Property Button */}
-        <button
+        {
+          !isAuthenticated?<> <button
           onClick={() => navigate("/login")}
           className="hidden md:flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200"
         >
           <Plus className="w-5 h-5" />
           Add Your Property
-        </button>
+        </button></>:<></>
+        }
+       
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">

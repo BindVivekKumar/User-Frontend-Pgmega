@@ -18,6 +18,7 @@ import AdminApp from "./admin/AdminApp";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { hydrateUser } from "./Bothfeatures/features/authSlice";
+import ProtectedRoute from "./userprotectedroutes";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,24 +42,22 @@ function App() {
     }
   }, [dispatch]);
 
-  // Check if user is admin/owner/branch-manager
-  const isAdminRoute = user?.role === "owner" || user?.role === "branch-manager";
+  // Admin roles
+  const isAdminRoute =
+    user?.role === "owner" || user?.role === "branch-manager";
+  const UserRoutes =
+    user?.role === "owner" || user?.role === "branch-manager";
 
   return (
     <div className="flex flex-col min-h-screen">
 
-      {/* Conditional Header */}
       {isAdminRoute ? (
-        <>
-          <DashboardHeader
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-            isMobileMenuOpen={isMobileMenuOpen}
-            setIsMobileMenuOpen={setIsMobileMenuOpen}
-          />
-     
-        </>
-
+        <DashboardHeader
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+          isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+        />
       ) : (
         <Header />
       )}
@@ -66,16 +65,20 @@ function App() {
       {/* Main content */}
       <main className="flex-1">
         <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/pg/:id" element={<PGDetailsPage />} />
-          <Route path="/PGMap/:branchId" element={<PGMap />} />
-          <Route path="/Wishlist" element={<Wishlist />} />
-          <Route path="/CancellationPolicy" element={<CancellationPolicy />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/termsandcondition" element={<TermsConditions />} />
-          <Route path="/shippingpolicy" element={<ShippingPolicy />} />
+          <Route element={<ProtectedRoute />}>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/pg/:id" element={<PGDetailsPage />} />
+            <Route path="/PGMap/:branchId" element={<PGMap />} />
+            <Route path="/Wishlist" element={<Wishlist />} />
+            </Route>
+            <Route path="/CancellationPolicy" element={<CancellationPolicy />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/termsandcondition" element={<TermsConditions />} />
+            <Route path="/shippingpolicy" element={<ShippingPolicy />} />
+          
+
 
           {/* Admin Routes */}
           <Route path="/admin/*" element={<AdminApp />} />
