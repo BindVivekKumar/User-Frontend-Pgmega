@@ -31,7 +31,7 @@ export default function PartnerWithRoomgi() {
         </h1>
         <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12">
           Join ROOMGI and grow your PG, Hostel, or Hotel business with increased visibility,
-          higher occupancy, smart tools, and seamless property management—just like OYO and Airbnb partners.
+          higher occupancy, smart tools, and seamless property management.
         </p>
 
         {/* Benefits */}

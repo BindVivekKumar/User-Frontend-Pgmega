@@ -43,12 +43,7 @@ export default function Footer() {
             >
               Privacy Policy
             </li>
-            <li
-              onClick={() => navigate("/contactus")}
-              className="cursor-pointer hover:opacity-100 duration-200"
-            >
-              Contact Us
-            </li>
+            
             <li
               onClick={() => navigate("/CancellationPolicy")}
               className="cursor-pointer hover:opacity-100 duration-200"
@@ -81,6 +76,13 @@ export default function Footer() {
               className="cursor-pointer hover:opacity-100 duration-200"
             >
               Customer Support
+            </li>
+
+            <li
+              onClick={() => navigate("/contactus")}
+              className="cursor-pointer hover:opacity-100 duration-200"
+            >
+              Contact Us
             </li>
           </ul>
         </div>
