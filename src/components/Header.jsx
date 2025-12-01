@@ -7,7 +7,6 @@ import { useLogoutUserMutation } from "../Bothfeatures/features/api/authapi";
 import { userLoggedout, hydrateUser } from "../Bothfeatures/features/authSlice";
 import { toast } from "react-toastify";
 
-
 export default function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -49,46 +48,48 @@ export default function Header() {
   };
 
   return (
-    <header className="backdrop-blur-xl bg-white/70 shadow-sm sticky top-0 z-50 border-b">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        
-        {/* Logo */}
+    <header className="backdrop-blur-xl bg-white/80 shadow-sm sticky top-0 z-50 border-b">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+
+        {/* LOGO */}
         <Link to="/" className="flex items-center gap-3 group">
           <img
             src={logo}
             alt="Logo"
-            className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-10"
+            className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-gray-700 hover:text-blue-600 font-semibold">
+        {/* DESKTOP NAV */}
+        <nav className="hidden md:flex items-center gap-10">
+          <Link to="/" className="text-gray-700 hover:text-blue-600 font-semibold text-lg">
             Home
           </Link>
-          <Link to="/about" className="text-gray-700 hover:text-blue-600 font-semibold">
+          <Link to="/about" className="text-gray-700 hover:text-blue-600 font-semibold text-lg">
             About
           </Link>
-          <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-semibold">
+          <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-semibold text-lg">
             Contact
           </Link>
         </nav>
 
-        {/* Desktop Right Side */}
+        {/* DESKTOP RIGHT SIDE */}
         <div className="hidden md:flex items-center space-x-6">
           {!isAuthenticated ? (
             <>
+              {/* Add Property */}
               <button
                 onClick={() => navigate("/login")}
-                className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200"
+                className="flex items-center gap-2 px-5 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200"
               >
                 <Plus className="w-5 h-5" />
                 Add Your Property
               </button>
 
+              {/* Login */}
               <button
                 onClick={() => navigate("/login")}
-                className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium shadow hover:shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2"
+                className="bg-blue-600 text-white px-7 py-2 rounded-full font-medium shadow hover:shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2"
               >
                 <User className="w-5 h-5" />
                 Sign In / Sign Up
@@ -96,30 +97,30 @@ export default function Header() {
             </>
           ) : (
             <div className="relative">
-              {/* User Avatar */}
+              {/* USER BUTTON */}
               <div
                 onClick={() => setOpenDropdown((prev) => !prev)}
-                className="flex items-center gap-2 cursor-pointer"
+                className="flex items-center gap-3 cursor-pointer"
               >
-                <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+                <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold text-lg">
                   {user?.username?.charAt(0)?.toUpperCase()}
                 </div>
 
-                <span className="font-medium text-gray-700">{user?.username}</span>
+                <span className="font-medium text-gray-700 text-lg">{user?.username}</span>
               </div>
 
-              {/* Dropdown */}
+              {/* DROPDOWN */}
               {openDropdown && (
-                <div className="absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-lg border py-2 animate-fadeIn z-50">
+                <div className="absolute right-0 mt-3 w-52 bg-white rounded-lg shadow-lg border py-2 animate-fadeIn z-50">
                   <button
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-700"
                     onClick={() => navigate("/profile")}
                   >
                     Profile
                   </button>
 
                   <button
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-700"
                     onClick={() => navigate("/wishlist")}
                   >
                     My Wishlist
@@ -141,71 +142,71 @@ export default function Header() {
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* MOBILE MENU BUTTON */}
         <button
-          className="md:hidden"
+          className="md:hidden ml-3"
           onClick={() => setMobileMenu((p) => !p)}
         >
-          <Menu className="w-7 h-7" />
+          <Menu className="w-8 h-8" />
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       {mobileMenu && (
         <div className="md:hidden px-6 pb-4 space-y-4 animate-slideDown">
 
-          {/* Mobile Nav Links */}
+          {/* MOBILE NAV LINKS */}
           <button
             onClick={() => { setMobileMenu(false); navigate("/"); }}
-            className="block w-full text-left px-2 py-2 text-gray-700 font-medium"
+            className="block w-full text-left px-2 py-2 text-gray-700 font-medium text-lg"
           >
             Home
           </button>
 
           <button
             onClick={() => { setMobileMenu(false); navigate("/about"); }}
-            className="block w-full text-left px-2 py-2 text-gray-700 font-medium"
+            className="block w-full text-left px-2 py-2 text-gray-700 font-medium text-lg"
           >
             About
           </button>
 
           <button
             onClick={() => { setMobileMenu(false); navigate("/contact"); }}
-            className="block w-full text-left px-2 py-2 text-gray-700 font-medium"
+            className="block w-full text-left px-2 py-2 text-gray-700 font-medium text-lg"
           >
             Contact
           </button>
 
-          {/* Add Property */}
+          {/* ADD PROPERTY (MOBILE) */}
           {!isAuthenticated && (
             <button
               onClick={() => { setMobileMenu(false); navigate("/login"); }}
-              className="flex items-center gap-2 w-full py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition"
+              className="flex items-center gap-2 w-full py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition text-lg"
             >
               <Plus className="w-5 h-5" /> Add Your Property
             </button>
           )}
 
-          {/* Authenticated mobile options */}
+          {/* AUTHENTICATED MOBILE OPTIONS */}
           {isAuthenticated ? (
             <>
               <button
                 onClick={() => navigate("/profile")}
-                className="block w-full text-left px-4 py-2"
+                className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
               >
                 Profile
               </button>
 
               <button
                 onClick={() => navigate("/wishlist")}
-                className="block w-full text-left px-4 py-2"
+                className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
               >
                 My Wishlist
               </button>
 
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 text-red-600"
+                className="block w-full text-left px-4 py-2 text-red-600 text-lg"
               >
                 Logout
               </button>
@@ -213,7 +214,7 @@ export default function Header() {
           ) : (
             <button
               onClick={() => navigate("/login")}
-              className="w-full py-2 rounded-lg bg-blue-600 text-white"
+              className="w-full py-2 rounded-lg bg-blue-600 text-white text-lg"
             >
               Sign In / Sign Up
             </button>
