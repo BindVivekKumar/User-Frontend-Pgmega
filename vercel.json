@@ -1,12 +1,8 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/loaderio-a05de8aef9430b245443d2213f5e84f7.txt",
-      "dest": "/loaderio-a05de8aef9430b245443d2213f5e84f7.txt"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
