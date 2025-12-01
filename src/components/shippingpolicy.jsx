@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 
 export default function ShippingPolicy() {
-  const { user } = useSelector((state) => state.auth); // get user from redux
+  const { user,isAuthenticated } = useSelector((state) => state.auth); // get user from redux
   const role = user?.role; // default role if no user
   return (
     <>
@@ -34,9 +34,8 @@ export default function ShippingPolicy() {
         </div>
 
       </div>
-      {
-        role !== "user" ? <Footer /> : <></>
-      }
+          {(isAuthenticated && role !== "user") ? <Footer /> : <></>}
+     
     </>
 
   );

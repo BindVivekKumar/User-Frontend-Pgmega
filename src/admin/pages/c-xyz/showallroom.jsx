@@ -111,10 +111,17 @@ function ShowRooms() {
 
                   {/* If Not Published, Show Banner */}
                   {!room?.toPublish?.status && (
-                    <div className="mt-3 bg-yellow-100 text-yellow-700 text-sm p-2 rounded-lg">
-                      This room is under admin verification.It will take 24 hour
-                    </div>
+                    <>
+                      {room?.comment && (
+                        <p className="text-sm text-gray-700">{room.comment}</p>
+                      )}
+
+                      <div className="mt-3 bg-yellow-100 text-yellow-700 text-sm p-2 rounded-lg">
+                        This room is under admin verification. It will take 24 hours.
+                      </div>
+                    </>
                   )}
+
 
                   {/* Facilities */}
                   <div className="mt-4">
@@ -145,9 +152,8 @@ function ShowRooms() {
                     <button
                       onClick={() => deletethatroom(room._id)}
                       disabled={deleteLoading}
-                      className={`px-4 py-2 ${
-                        deleteLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"
-                      } text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all`}
+                      className={`px-4 py-2 ${deleteLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"
+                        } text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all`}
                     >
                       {deleteLoading ? "Deleting..." : "Delete"}
                     </button>

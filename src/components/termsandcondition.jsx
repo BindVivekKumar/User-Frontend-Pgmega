@@ -3,7 +3,7 @@ import  Footer  from "./Footer";
 
 
 export default function TermsConditions() {
-  const { user } = useSelector((state) => state.auth); // get user from redux
+  const { user,isAuthenticated } = useSelector((state) => state.auth); // get user from redux
   const role = user?.role; // default role if no user
   return (
     <div className="min-h-screen bg-gray-50">
@@ -59,9 +59,8 @@ export default function TermsConditions() {
         
 
       </div>
-      {
-          role!=="user"?<Footer/>:<></>
-        }
+           {(isAuthenticated && role !== "user") ? <Footer /> : <></>}
+      
     </div>
   );
 }
