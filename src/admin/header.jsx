@@ -27,10 +27,14 @@ export default function DashboardHeader({
       localStorage.removeItem("user");
       toast.success("Logged out successfully");
       navigate("/");
-    } catch (err) {
+    } 
+    
+    catch (err) {
+
+       navigate("/")
       console.log(err);
       toast.error("Failed to logout");
-      navigate("/")
+     
       
     }
   };
