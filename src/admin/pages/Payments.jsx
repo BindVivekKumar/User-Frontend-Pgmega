@@ -64,7 +64,7 @@ export default function Payments() {
 
 
   const changepage = () => {
-    navigate("/add-payment")
+    navigate("/admin/add-payment")
   };
 
   const handleRemindTenant = (tenant) => {
