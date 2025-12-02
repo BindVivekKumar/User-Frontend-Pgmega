@@ -98,9 +98,39 @@ export default function AuthModal({ isOpen, onClose }) {
           <X className="w-6 h-6" />
         </button>
         {/* Heading */}
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center tracking-wide">
-          {isSignUp ? "Create Account" : "Login"}
+        
+
+        <div className="flex justify-center items-center gap-8 mb-4">
+
+          
+  <button
+    onClick={() => setIsSignUp(false)}
+    className={`text-lg font-semibold transition ${
+      !isSignUp
+        ? "text-indigo-700 border-b-4 border-indigo-700 pb-1"
+        : "text-gray-500 hover:text-gray-700"
+    }`}
+  >
+    Login
+  </button>
+
+  <button
+    onClick={() => setIsSignUp(true)}
+    className={`text-lg font-semibold transition ${
+      isSignUp
+        ? "text-indigo-700 border-b-4 border-indigo-700 pb-1"
+        : "text-gray-500 hover:text-gray-700"
+    }`}
+  >
+    Sign Up
+  </button>
+
+  
+</div>
+<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center tracking-wide">
+          {isSignUp ? "Create Account" : "Login Now"}
         </h2>
+
 
         {/* Form */}
         <form className="space-y-4" onSubmit={handleSubmit}>
