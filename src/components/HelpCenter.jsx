@@ -15,7 +15,7 @@ export default function HelpCenter() {
   const categories = [
     {
       title: "Bookings",
-      desc: "Help related to hotel, PG, and hostel bookings.",
+      desc: "Help related to PG Hotel, Hostel and Room bookings.",
       faqs: [
         { q: "How do I make a booking?", a: "Search → Select property → Choose room → Confirm booking." },
         { q: "Can I book monthly PG stays?", a: "Yes, ROOMGI supports monthly and long-term stays." },
@@ -30,8 +30,8 @@ export default function HelpCenter() {
       ],
     },
     {
-      title: "PG & Hostel Rules",
-      desc: "Everything about PG/Hostel stay policies.",
+      title: "PG Hotel, Hostel and Room Rules",
+      desc: "Everything about PG Hotel, Hostel and Room stay policies.",
       faqs: [
         { q: "Is there a security deposit?", a: "Deposits depend on the specific PG/Hostel." },
         { q: "Can I visit before booking?", a: "Some properties allow visits, check details on the listing." },

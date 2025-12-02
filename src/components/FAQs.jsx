@@ -8,15 +8,15 @@ export default function FAQsPage() {
   const faqs = [
     {
       q: "What is ROOMGI?",
-      a: "ROOMGI is a hotel, PG, and hostel booking platform offering verified stays across India.",
+      a: "ROOMGI is a PG Hotel, Hostel and Room booking platform offering verified stays across India.",
     },
     {
       q: "How do I book a room?",
       a: "Search your location, choose a property, select room type, review details, and confirm booking.",
     },
     {
-      q: "Does ROOMGI support monthly PG bookings?",
-      a: "Yes. Many PG and hostel listings support long‑term stays with monthly rent options.",
+      q: "Does ROOMGI support monthly PG Hotel, Hostel and Room bookings?",
+      a: "Yes. Many PG Hotel, Hostel and Room and hostel listings support long‑term stays with monthly rent options.",
     },
     {
       q: "What payment methods are available?",

@@ -18,7 +18,7 @@ export default function ShippingPolicy() {
 
           {/* Content */}
           <p className="text-gray-700 text-lg sm:text-xl mb-4 leading-relaxed">
-            ROOMGI is a service-based platform that provides online PG, hostel, and hotel booking services.
+            ROOMGI is a service-based platform that provides online PG Hotel, Hostel and Rooml booking services.
           </p>
           <p className="text-gray-700 text-lg sm:text-xl mb-4 leading-relaxed">
             We do not ship any physical products.

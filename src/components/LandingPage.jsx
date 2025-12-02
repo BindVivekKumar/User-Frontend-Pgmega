@@ -315,7 +315,16 @@ export default function LandingPage() {
           <div className="mb-4">
             <label className="font-semibold">Facilities</label>
             <div className="grid grid-cols-2 gap-2 mt-2">
-              {["WiFi", "Parking", "Food", "AC", "Laundry", "Power Backup"].map((item) => (
+              {[ "AC",
+                "Non-AC",
+                "Bathroom",
+                "WiFi",
+                "Power Backup",
+                "Laundry",
+                "CCTV",
+                "Parking",
+                "Refrigerator",
+                 "24x7 Electricity"].map((item) => (
                 <label key={item} className="flex items-center gap-2">
                   <input
                     type="checkbox"

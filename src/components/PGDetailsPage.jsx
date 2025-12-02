@@ -184,7 +184,7 @@ export default function PGDetailsPage() {
               />
               <Action
                 icon={<Share2 />}
-                label="Share PG"
+                label="Share PG Hotel, Hostel and Room"
                 onClick={sharePG}
                 isAuthenticated={isAuthenticated}
                 onAuthOpen={() => setIsAuthModalOpen(true)}

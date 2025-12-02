@@ -41,7 +41,7 @@ export default function PartnerWithRoomgi() {
     
         
         <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12">
-          Join ROOMGI and grow your PG, Hostel, or Hotel business with increased visibility,
+          Join ROOMGI and grow your PG Hotel, Hostel and Room business with increased visibility,
           higher occupancy, smart tools, and seamless property management.
         </p>
       </div>
@@ -96,7 +96,7 @@ export default function PartnerWithRoomgi() {
             <input type="text" name="name" placeholder="Your Name" value={form.name} onChange={updateField} required className="p-3 border rounded-xl" />
             <input type="email" name="email" placeholder="Email Address" value={form.email} onChange={updateField} required className="p-3 border rounded-xl" />
             <input type="text" name="phone" placeholder="Phone Number" value={form.phone} onChange={updateField} required className="p-3 border rounded-xl" />
-            <input type="text" name="propertyType" placeholder="Property Type (PG / Hostel / Hotel)" value={form.propertyType} onChange={updateField} required className="p-3 border rounded-xl" />
+            <input type="text" name="propertyType" placeholder="Property Type (PG Hotel, Hostel and Room)" value={form.propertyType} onChange={updateField} required className="p-3 border rounded-xl" />
             <input type="text" name="city" placeholder="City" value={form.city} onChange={updateField} required className="p-3 border rounded-xl" />
             <input type="text" name="propertyName" placeholder="Property Name" value={form.propertyName} onChange={updateField} required className="p-3 border rounded-xl" />
 

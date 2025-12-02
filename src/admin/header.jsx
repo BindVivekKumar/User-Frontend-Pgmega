@@ -76,7 +76,7 @@ export default function DashboardHeader({
           <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center shadow-md">
             <Building2 className="text-white" size={18} />
           </div>
-          <h1 className="font-semibold text-xl text-blue-900">PG Admin</h1>
+          <h1 className="font-semibold text-xl text-blue-900">Rooms Admin</h1>
         </div>
       </div>
 
