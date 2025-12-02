@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import {
   useAddRoomMutation,
   useGetAllBranchbybranchIdQuery,
@@ -23,24 +23,24 @@ function AddRoomForm() {
 
   const [
     addRoom,
-    { data: AddRoomdata, isLoading, isSuccess, isError, error }
+    { data: AddRoomdata, isLoading, isSuccess: addroomsuccess, isError, error }
   ] = useAddRoomMutation();
 
   const { data: Allbranchdata, isLoading: AllBranchloading } =
     useGetAllBranchbybranchIdQuery();
 
   const facilityOptions = [
-     "AC",
-                "Non-AC",
-                "Bathroom",
-                "WiFi",
-                "Power Backup",
-                "Laundry",
-                "CCTV",
-                "Parking",
-                "Refrigerator",
-                 "24x7 Electricity",
-              
+    "AC",
+    "Non-AC",
+    "Bathroom",
+    "WiFi",
+    "Power Backup",
+    "Laundry",
+    "CCTV",
+    "Parking",
+    "Refrigerator",
+    "24x7 Electricity",
+
   ];
 
   const handleFacilities = (facility) => {
@@ -80,14 +80,14 @@ function AddRoomForm() {
       if (img) formData.append("images", img);
     });
 
-    toast.loading("Adding room...", { id: "ROOM_ADD" });
     await addRoom(formData);
-    navigate("/admin/properties")
+
   };
 
   useEffect(() => {
-    if (isSuccess) {
-
+    console.log("add 1")
+    if (addroomsuccess) {
+      console.log("isSuccess")
       toast.success("Room Will Be Listed after Verification")
       refetch();  // 🔥 auto refresh list
       navigate(-1);
@@ -98,7 +98,7 @@ function AddRoomForm() {
         id: "ROOM_ADD",
       });
     }
-  }, [isSuccess, isError, error]);
+  }, [addroomsuccess, isError, error]);
 
   if (AllBranchloading) return <div>Loading branches...</div>;
 

@@ -13,15 +13,15 @@ import { Trash2, Upload, ArrowLeft, X } from "lucide-react";
 
 const FEATURE_OPTIONS = [
   "AC",
+  "Non-AC",
+  "Bathroom",
   "WiFi",
-  "Washing Machine",
-  "Parking",
-  "CCTV",
-  "Attached Bathroom",
-  "Balcony",
   "Power Backup",
-  "Geyser",
-  "Fridge",
+  "Laundry",
+  "CCTV",
+  "Parking",
+  "Refrigerator",
+  "24x7 Electricity",
 ];
 
 export default function EditRoomForm() {
@@ -29,7 +29,7 @@ export default function EditRoomForm() {
   const navigate = useNavigate();
 
   const { data, isLoading, refetch } = useGetRoomByIdQuery(roomId);
-  const [updateRoom] = useUpdateRoomMutation();
+  const [updateRoom, { isSuccess, isLoading: isUpdating }] = useUpdateRoomMutation();
   const [deleteImageAPI] = useDeleteRoomImageMutation();
   const [addImagesAPI] = useAddRoomImagesMutation();
 
@@ -43,6 +43,7 @@ export default function EditRoomForm() {
 
   const [selectedImages, setSelectedImages] = useState([]);
 
+  // Populate form data on load
   useEffect(() => {
     if (data?.room) {
       setFormData({
@@ -55,17 +56,26 @@ export default function EditRoomForm() {
     }
   }, [data]);
 
+  // Show success toast and navigate back when update succeeds
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Room Updated Successfully");
+      navigate(-1);
+    }
+  }, [isSuccess, navigate]);
+
+  // ✅ Update Room
   const handleUpdateRoom = async () => {
     try {
-      await updateRoom({ id: roomId, ...formData }).unwrap();
-      toast.success("Room updated successfully!");
-      navigate(-1);
+      console.log("SENDING TO BACKEND:", formData); // Logs all form data
+      await updateRoom({ id: roomId, data: formData }).unwrap();
     } catch (err) {
+      console.log("UPDATE ERROR:", err);
       toast.error("Failed to update room!");
     }
   };
 
-  // delete image
+  // ✅ Delete Image
   const handleDeleteImage = async (imgUrl) => {
     try {
       await deleteImageAPI({ id: roomId, imageurl: imgUrl }).unwrap();
@@ -76,15 +86,18 @@ export default function EditRoomForm() {
     }
   };
 
+  // ✅ Select Images
   const handleSelectImages = (e) => {
     const files = Array.from(e.target.files);
     setSelectedImages((prev) => [...prev, ...files]);
   };
 
+  // ✅ Remove selected image before upload
   const removeSelectedImage = (index) => {
     setSelectedImages(selectedImages.filter((_, i) => i !== index));
   };
 
+  // ✅ Upload Images
   const handleAddImages = async () => {
     if (selectedImages.length === 0) {
       return toast.error("Select images first!");
@@ -116,7 +129,6 @@ export default function EditRoomForm() {
   return (
     <>
       <Toaster />
-
       <div className="max-w-5xl mx-auto p-6">
         <button
           onClick={() => navigate(-1)}
@@ -168,7 +180,6 @@ export default function EditRoomForm() {
                       src={URL.createObjectURL(img)}
                       className="w-full h-28 object-cover rounded-lg border"
                     />
-
                     <button
                       onClick={() => removeSelectedImage(index)}
                       className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1"
@@ -239,10 +250,7 @@ export default function EditRoomForm() {
                       ? formData.facilities.filter((x) => x !== feature)
                       : [...formData.facilities, feature];
 
-                    setFormData({
-                      ...formData,
-                      facilities: updated,
-                    });
+                    setFormData({ ...formData, facilities: updated });
                   }}
                   className="h-4 w-4"
                 />
@@ -262,9 +270,15 @@ export default function EditRoomForm() {
 
           <button
             onClick={handleUpdateRoom}
-            className="w-full py-3 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold rounded-lg shadow"
+            disabled={isUpdating}
+            className={`w-full py-3 ${isUpdating ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+              } text-white text-lg font-semibold rounded-lg shadow flex justify-center items-center gap-2`}
           >
-            Save Changes
+            {isUpdating ? (
+              <div className="animate-spin h-5 w-5 border-t-2 border-white rounded-full"></div>
+            ) : (
+              "Save Changes"
+            )}
           </button>
         </div>
       </div>

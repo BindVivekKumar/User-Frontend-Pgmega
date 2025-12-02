@@ -73,7 +73,7 @@ export default function AuthModal({ isOpen, onClose }) {
 
       // Navigate based on role
       if (res?.existingUser?.role !== "user") navigate("/admin/properties");
-      else navigate("/");
+      else navigate(-1);
 
       // Reset form
       setFormData({ username: "", email: "", password: "", phone: "", role: "" });
@@ -91,7 +91,7 @@ export default function AuthModal({ isOpen, onClose }) {
         <button
           onClick={() => {
             // properly call the function
-            navigate("/"); // navigate after closing
+            navigate(-1); // navigate after closing
           }}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
         >
