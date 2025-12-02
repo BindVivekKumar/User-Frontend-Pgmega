@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Phone, Navigation, Share2, Star, BadgeCheck, Loader2 } from "lucide-react";
+import { Phone, Navigation, Share2, Star, BadgeCheck, Loader2, MapPin } from "lucide-react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
@@ -28,47 +28,38 @@ export default function PGDetailsPage() {
     return [...branchImages, ...roomImages];
   }, [pg]);
 
-  // GET USER LOCATION
+  // Get user location
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
         () => toast.warning("Enable location to get directions")
       );
     }
   }, []);
 
-  // BOOKING
   const handleBook = () => {
     if (!isAuthenticated) return setIsAuthModalOpen(true);
-    // Navigate to booking page or handle booking logic
     navigate(`/book/${pg._id}`);
   };
 
-  // MAP DIRECTIONS
   const handleGetDirections = () => {
     if (!isAuthenticated) return setIsAuthModalOpen(true);
-
     const [lng, lat] = pg?.branch?.location?.coordinates || [];
     if (!lat || !lng) return toast.error("PG location missing");
     if (!userLocation.lat) return toast.error("User location not available");
 
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${lat},${lng}&travelmode=driving`;
-    window.open(url, "_blank");
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${lat},${lng}&travelmode=driving`,
+      "_blank"
+    );
   };
 
-  // SHARE PG
   const sharePG = () => {
     if (!isAuthenticated) return setIsAuthModalOpen(true);
-
     if (navigator.share) {
       navigator.share({
-        title: "Check this PG",
+        title: `Check out ${pg.branch.name}`,
         text: "I found an amazing PG!",
         url: window.location.href,
       });
@@ -94,147 +85,153 @@ export default function PGDetailsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
- 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* IMAGE SLIDER */}
-        <div className="relative h-80 rounded-lg overflow-hidden shadow-lg mb-8">
-          <img src={allImages[imageIndex]} alt="PG" className="w-full h-full object-cover" />
-          <button
-            onClick={() =>
-              setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))
-            }
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
-          >
-            ‹
-          </button>
-          <button
-            onClick={() => setImageIndex((prev) => (prev + 1) % allImages.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
-          >
-            ›
-          </button>
-        </div>
+      <Header />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* BASIC INFO */}
-            <div className="bg-white p-6 rounded-xl shadow">
-              <h1 className="text-3xl font-bold text-gray-900">{pg.branch.name}</h1>
-              <div className="flex items-center space-x-4 mt-2">
-                <div className="flex items-center">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <span className="ml-1 font-semibold">{pg.rating}</span>
-                </div>
-                <div className="flex items-center text-green-600">
-                  <BadgeCheck className="w-5 h-5 mr-1" />
-                  <span className="text-sm">Verified</span>
-                </div>
-              </div>
-              <p className="text-gray-600 mt-4">{pg.branch.address}</p>
+      {/* IMAGE SLIDER */}
+      <div className="max-w-6xl mx-auto mt-8 relative h-96 rounded-xl overflow-hidden shadow-lg">
+        <img src={allImages[imageIndex]} alt="PG" className="w-full h-full object-cover transition-transform duration-500" />
+        <button
+          onClick={() => setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100"
+        >
+          ‹
+        </button>
+        <button
+          onClick={() => setImageIndex((prev) => (prev + 1) % allImages.length)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100"
+        >
+          ›
+        </button>
+      </div>
+
+      {/* MAIN CONTENT */}
+      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* LEFT: Info blocks */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* BASIC INFO BLOCK */}
+          <InfoBlock title="Basic Information">
+            <h2 className="text-2xl font-bold">{pg.branch.name}</h2>
+            <div className="flex items-center space-x-4 mt-1">
+              <Star className="w-5 h-5 text-yellow-500" />
+              <span>{pg.branch.Rating || 0}</span>
+              <BadgeCheck className="w-5 h-5 text-green-600" />
+              <span className="text-sm text-green-600">Verified</span>
             </div>
+            <p className="mt-2 text-gray-700">{pg.branch.address}</p>
+            <p className="mt-1 text-gray-700">City: {pg.city}</p>
+            <p className="mt-1 text-gray-700">Room Type: {pg.type}</p>
+            <p className="mt-1 text-gray-700">Furnished: {pg.furnishedType}</p>
+            <p className="mt-1 text-gray-700">Floor: {pg.floor}</p>
+            <p className="mt-1 text-gray-700">Availability: {pg.availabilityStatus}</p>
+          </InfoBlock>
 
-            {/* FACILITIES */}
-            <div className="bg-white p-6 rounded-xl shadow">
-              <h2 className="text-xl font-bold mb-4">Facilities</h2>
+          {/* DESCRIPTION BLOCK */}
+          {pg.description && (
+            <InfoBlock title="Description">
+              <p className="text-gray-700">{pg.description}</p>
+            </InfoBlock>
+          )}
+
+          {/* RULES BLOCK */}
+          {pg.rules?.length > 0 && (
+            <InfoBlock title="Rules">
+              <ul className="list-disc list-inside text-gray-700">
+                {pg.rules.map((rule, i) => (
+                  <li key={i}>{rule}</li>
+                ))}
+              </ul>
+            </InfoBlock>
+          )}
+
+          {/* NOT ALLOWED BLOCK */}
+          {pg.notAllowed?.length > 0 && (
+            <InfoBlock title="Not Allowed">
+              <ul className="list-disc list-inside text-gray-700">
+                {pg.notAllowed.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </InfoBlock>
+          )}
+
+          {/* FACILITIES BLOCK */}
+          {pg.facilities?.length > 0 && (
+            <InfoBlock title="Facilities">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {pg.facilities?.map((item, i) => (
+                {pg.facilities.map((item, i) => (
                   <div key={i} className="flex items-center gap-2 bg-gray-100 p-2 rounded-md">
                     <span className="text-green-600 font-bold">✔</span>
                     <span className="text-gray-700">{item}</span>
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
+            </InfoBlock>
+          )}
+        </div>
 
-          {/* RIGHT */}
-          <div className="bg-white p-6 rounded-xl shadow sticky top-24 space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900">Rent Breakdown</h2>
-            {pg.category === "Pg" ? (
-              <Price label="Rent per Month" value={pg.price} />
-            ) : (
-              <>
-                <Price label="Rent per Day" value={pg.rentperday} />
-                <Price label="Rent per Hour" value={pg.rentperhour} />
-                <Price label="Rent per Night" value={pg.rentperNight} />
-              </>
-            )}
+        {/* RIGHT: Rent & Actions */}
+        <div className="space-y-6">
+          <InfoBlock title="Rent">
+            <Price label="Rent per Month" value={pg.price} />
+          </InfoBlock>
 
-            {/* BOOK BUTTON */}
-           
+          <InfoBlock title="Actions">
+            <button
+              onClick={handleBook}
+              className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
+            >
+              Book Now
+            </button>
 
-
-            {/* ACTION BUTTONS */}
             <div className="flex flex-col mt-4 space-y-3">
-               <Action
-              icon={<Phone />}
-              label={isAuthenticated ? "Contact Owner" : "Login to Contact Owner"}
-              whatsappNumber="+919693915693"
-              isAuthenticated={isAuthenticated}
-              onAuthOpen={() => setIsAuthModalOpen(true)}
-            />
-
-              <Action
-                icon={<Navigation />}
-                label="Get Directions"
-                onClick={handleGetDirections}
-                isAuthenticated={isAuthenticated}
-                onAuthOpen={() => setIsAuthModalOpen(true)}
-              />
-              <Action
-                icon={<Share2 />}
-                label="Share PG Hotel, Hostel and Room"
-                onClick={sharePG}
-                isAuthenticated={isAuthenticated}
-                onAuthOpen={() => setIsAuthModalOpen(true)}
-              />
+              <Action icon={<Phone />} label="Contact Owner" whatsappNumber="+919693915693" isAuthenticated={isAuthenticated} onAuthOpen={() => setIsAuthModalOpen(true)} />
+              <Action icon={<Navigation />} label="Get Directions" onClick={handleGetDirections} isAuthenticated={isAuthenticated} onAuthOpen={() => setIsAuthModalOpen(true)} />
+              <Action icon={<Share2 />} label="Share PG" onClick={sharePG} isAuthenticated={isAuthenticated} onAuthOpen={() => setIsAuthModalOpen(true)} />
             </div>
-          </div>
+          </InfoBlock>
         </div>
       </div>
 
-     
-
-      {/* AUTH MODAL */}
-      {
-        isAuthModalOpen && (
-          <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-        )
-      }
-    </div >
+      {isAuthModalOpen && <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />}
+      <Footer />
+    </div>
   );
 }
 
-// PRICE
+// REUSABLE INFO BLOCK COMPONENT
+function InfoBlock({ title, children }) {
+  return (
+    <div className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition">
+      <h3 className="text-xl font-bold text-gray-800 mb-3">{title}</h3>
+      {children}
+    </div>
+  );
+}
+
+// PRICE COMPONENT
 function Price({ label, value }) {
   return (
-    <div className="flex justify-between border-b py-2">
+    <div className="flex justify-between py-2 border-b">
       <span className="text-gray-600">{label}</span>
       <span className="font-semibold">₹{value}</span>
     </div>
   );
 }
 
-// ACTION BUTTON
+// ACTION BUTTON COMPONENT
 function Action({ icon, label, onClick, whatsappNumber, isAuthenticated, onAuthOpen }) {
   const handleClick = () => {
     if (!isAuthenticated) return onAuthOpen();
-
     if (whatsappNumber) {
       const msg = encodeURIComponent("Hello, I'm interested in your PG");
       window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, "_blank");
       return;
     }
-
     if (onClick) onClick();
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className="flex items-center gap-3 p-3 border rounded-lg shadow-sm transition hover:bg-gray-100"
-    >
+    <button onClick={handleClick} className="flex items-center gap-3 p-3 border rounded-xl shadow-sm transition hover:bg-gray-100">
       {icon}
       <span className="font-medium">{label}</span>
     </button>

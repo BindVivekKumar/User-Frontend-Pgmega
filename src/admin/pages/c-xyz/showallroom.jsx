@@ -26,7 +26,7 @@ function ShowRooms() {
       await deleteRoom(roomId).unwrap();
       toast.success("Room deleted successfully!");
     } catch (err) {
-      toast.error("Failed to delete room");
+      toast.error("Room is Occupied By SomeOne");
       console.error(err);
     } finally {
       setDeletingRoomId(null);
