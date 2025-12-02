@@ -1,38 +1,51 @@
-import { useEffect } from "react";
-import { useGetAllRoomQuery, useDeleteRoomMutation } from "../../../Bothfeatures/features2/api/propertyapi";
+import { useEffect, useState } from "react";
+import {
+  useGetAllRoomQuery,
+  useDeleteRoomMutation,
+} from "../../../Bothfeatures/features2/api/propertyapi";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 function ShowRooms() {
   const navigate = useNavigate();
-  const { data, isLoading, error } = useGetAllRoomQuery();
-  const [deleteRoom, { isLoading: deleteLoading }] = useDeleteRoomMutation();
 
-  // Delete room
+  // ✅ GET ROOMS QUERY (refetch comes from here)
+  const { data, isLoading, error, refetch } = useGetAllRoomQuery();
+
+  // ✅ DELETE ROOM MUTATION
+  const [deleteRoom, { isSuccess }] = useDeleteRoomMutation();
+
+  // 🟡 store currently deleting room ID
+  const [deletingRoomId, setDeletingRoomId] = useState(null);
+
+  // 🗑 Delete Room Function
   const deletethatroom = async (roomId) => {
     try {
+      setDeletingRoomId(roomId);
       await deleteRoom(roomId).unwrap();
       toast.success("Room deleted successfully!");
     } catch (err) {
       toast.error("Failed to delete room");
       console.error(err);
+    } finally {
+      setDeletingRoomId(null);
     }
   };
 
-  // Navigate to edit page
+  // ✏ Edit Room
   const EditRoom = (roomId) => {
-    console.log(roomId)
     navigate(`/admin/edit-room/${roomId}`);
   };
 
+  // 🔄 After success delete → refetch rooms
   useEffect(() => {
-    if (data) {
-      console.log("Fetched Rooms : ", data?.rooms);
+    if (isSuccess) {
+      refetch(); // only from query
     }
-  }, [data]);
+  }, [isSuccess, refetch]);
 
-  // Loading state
+  // Loading UI
   if (isLoading)
     return (
       <div className="flex justify-center items-center h-60">
@@ -40,7 +53,7 @@ function ShowRooms() {
       </div>
     );
 
-  // Error state
+  // Error UI
   if (error)
     return (
       <div className="text-red-500 text-center mt-10 text-lg">
@@ -58,7 +71,9 @@ function ShowRooms() {
         </h1>
 
         {data?.rooms?.length === 0 ? (
-          <p className="text-gray-500 text-center text-lg mt-10">No rooms added yet.</p>
+          <p className="text-gray-500 text-center text-lg mt-10">
+            No rooms added yet.
+          </p>
         ) : (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {data.rooms.map((room, index) => (
@@ -86,8 +101,10 @@ function ShowRooms() {
                   </span>
 
                   {/* Room Type */}
-                  <span className="absolute bottom-3 right-3 bg-gradient-to-r from-red-600 to-red-700 
-                                   text-white px-3 py-1 rounded-lg text-xs shadow-xl">
+                  <span
+                    className="absolute bottom-3 right-3 bg-gradient-to-r from-red-600 to-red-700 
+                                   text-white px-3 py-1 rounded-lg text-xs shadow-xl"
+                  >
                     {room.type}
                   </span>
                 </div>
@@ -115,7 +132,7 @@ function ShowRooms() {
 
                   <p className="text-gray-600 mt-1 capitalize">{room.type} Room</p>
 
-                  {/* Verification Message / Comment */}
+                  {/* Verification Message */}
                   {!room?.toPublish?.status && (
                     <div className="mt-3">
                       {room?.comment ? (
@@ -132,7 +149,9 @@ function ShowRooms() {
 
                   {/* Facilities */}
                   <div className="mt-4">
-                    <h3 className="font-semibold text-gray-700 mb-2">Facilities</h3>
+                    <h3 className="font-semibold text-gray-700 mb-2">
+                      Facilities
+                    </h3>
                     <div className="flex gap-2 flex-wrap">
                       {room.facilities?.map((f, idx) => (
                         <span
@@ -158,12 +177,14 @@ function ShowRooms() {
 
                     <button
                       onClick={() => deletethatroom(room._id)}
-                      disabled={deleteLoading}
+                      disabled={deletingRoomId === room._id}
                       className={`px-4 py-2 ${
-                        deleteLoading ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"
+                        deletingRoomId === room._id
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-red-500 hover:bg-red-600"
                       } text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all`}
                     >
-                      {deleteLoading ? "Deleting..." : "Delete"}
+                      {deletingRoomId === room._id ? "Deleting..." : "Delete"}
                     </button>
                   </div>
                 </div>
