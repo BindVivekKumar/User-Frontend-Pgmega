@@ -20,7 +20,7 @@ import AboutUs from "./components/AbutUs.jsx";
 import About from "./components/About.jsx";
 import Contact from "./components/Contact.jsx";
 import Searched from "./components/filtered.jsx";
-
+import AllPotos from "./components/allphotos";
 import DashboardHeader from "./admin/header";
 import AdminApp from "./admin/AdminApp";
 import Header from "./components/Header";
@@ -78,6 +78,7 @@ function App() {
     {/* Protected Routes */}
     <Route element={<ProtectedRoute />}>
       <Route path="/" element={<LandingPage />} />
+       <Route path="/allpotos/:id" element={<AllPotos />} />
       <Route path="/pg/:id" element={<PGDetailsPage />} />
       <Route path="/PGMap/:branchId" element={<PGMap />} />
       <Route path="/Wishlist" element={<Wishlist />} />

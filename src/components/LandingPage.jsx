@@ -94,113 +94,158 @@ export default function LandingPage() {
           <p className="text-xl mb-6">Safe, Comfortable & Affordable Accommodation</p>
 
           <div
-  className="w-full max-w-2xl bg-white/90 backdrop-blur-md shadow-xl rounded-full p-2 border border-white/30
+            className="w-full max-w-2xl bg-white/90 backdrop-blur-md shadow-xl rounded-full p-2 border border-white/30
              absolute left-1/2 -translate-x-1/2 -bottom-8"
->
-  <div className="relative flex gap-2 w-full">
-    <input
-      type="text"
-      placeholder="Search by neareast location / name..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      onKeyPress={(e) => e.key === 'Enter' && handleFindPG()}
-      className="flex-1 px-4 py-4 rounded-full text-gray-900 text-base bg-transparent focus:outline-none mt-0"
-    />
-    <button
-      onClick={handleFindPG}
-      className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition font-medium text-base pb-1"
-    >
-      Find
-    </button>
-  </div>
+          >
+            <div className="relative flex gap-2 w-full">
+              <input
+                type="text"
+                placeholder="Search by neareast location / name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleFindPG()}
+                className="flex-1 px-4 py-4 rounded-full text-gray-900 text-base bg-transparent focus:outline-none mt-0"
+              />
+              <button
+                onClick={handleFindPG}
+                className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition font-medium text-base pb-1"
+              >
+                Find
+              </button>
+            </div>
 
-  {searchError && (
-    <p className="text-red-500 text-sm mt-2 text-center">{searchError}</p>
-  )}
-</div>
+            {searchError && (
+              <p className="text-red-500 text-sm mt-2 text-center">{searchError}</p>
+            )}
+          </div>
 
 
-         
+
         </div>
       </div>
 
-{/* PG LIST */}
-{isLoading ? (
-  <Loader />
-) : (
-  <div className="max-w-7xl mx-auto px-4 py-10">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {pgData.length > 0 ? (
-        pgData.map(pg => (
-          <div
-            key={pg._id}
-            onClick={() => navigate(`/pg/${pg._id}`)}
-            className="cursor-pointer bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden border border-gray-100 hover:-translate-y-1 duration-200"
-          >
-            {/* IMAGE + WISHLIST */}
-            <div className="relative">
-              <img
-                src={pg?.roomImages?.[0]}
-                alt={pg?.name}
-                className="h-44 w-full object-cover rounded-t-2xl"
-              />
-
-              {/* Prevent click bubbling + Extra spacing added */}
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="absolute top-6 right-5"
-              >
-                <WishlistButton
-                  pg={pg}
-                  onAuthOpen={() => setIsAuthModalOpen(true)}
-                />
-              </div>
-
-              {/* CATEGORY TAG */}
-              <span className="absolute bottom-3 left-3 bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-full shadow">
-                {pg?.category}
-              </span>
-            </div>
-
-            {/* CONTENT */}
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-900 leading-tight">
-                {pg?.branch?.name}
-              </h3>
-
-              <p className="text-gray-500 text-sm mt-1 leading-snug flex items-center gap-1">
-                📍 {pg?.branch?.address}
-              </p>
-
-              {/* PRICE */}
-              <p className="text-blue-700 font-bold mt-2 text-base">
-                {pg?.category === "Pg"
-                  ? `₹${pg?.price}/month`
-                  : `₹${pg?.rentperNight}/night`}
-              </p>
-
-              {/* FACILITIES */}
-              <div className="flex flex-wrap gap-2 mt-3">
-                {pg?.facilities?.slice(0, 4).map((item, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))
+      {/* PG LIST */}
+      {isLoading ? (
+        <Loader />
       ) : (
-        <div className="col-span-full text-center py-12 text-gray-500 text-lg">
-          No Rooms available
+        <div className="max-w-7xl mx-auto px-4 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {pgData.length > 0 ? (
+              pgData.map((pg) => (
+                <div
+                  key={pg._id}
+                  onClick={() => navigate(`/pg/${pg._id}`)}
+                  className="cursor-pointer bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 hover:-translate-y-2"
+                >
+                  {/* IMAGE + BADGES */}
+                  <div className="relative group">
+                    <img
+                      src={pg?.roomImages?.[0]}
+                      alt={pg?.branch?.name}
+                      className="h-48 w-full object-cover rounded-t-2xl transition-transform duration-300 group-hover:scale-110"
+                    />
+
+                    {/* Wishlist Button */}
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="absolute top-4 right-4"
+                    >
+                      <WishlistButton
+                        pg={pg}
+                        onAuthOpen={() => setIsAuthModalOpen(true)}
+                      />
+                    </div>
+
+                    {/* Category Tag */}
+                    <span className="absolute bottom-4 left-4 bg-white/90 backdrop-blur text-black text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                      {pg?.category}
+                    </span>
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="p-5 space-y-2">
+                    {/* Title */}
+                    <h3 className="text-lg font-bold text-gray-900 leading-tight">
+                      {pg?.branch?.name} - Room {pg?.roomNumber}
+                    </h3>
+
+                    {/* Address */}
+                    <p className="text-gray-500 text-sm mt-1 flex items-center gap-1">
+                      📍 {pg?.branch?.address || pg?.branch?.location?.address}
+                    </p>
+
+                    {/* Price */}
+                    <p className="text-blue-700 font-bold mt-2 text-lg">
+                      {pg?.category === "Pg"
+                        ? `₹${pg?.price}/month`
+                        : `₹${pg?.rentperNight}/night`}
+                    </p>
+
+                    {/* Room Type & Occupancy */}
+                    <p className="text-gray-600 text-sm">
+                      <strong>Type:</strong> {pg?.type} | <strong>Occupied:</strong> {pg?.occupied}/{pg?.count || "N/A"}
+                    </p>
+
+                    {/* Allowed / Not Allowed */}
+                    <p className="text-gray-600 text-sm">
+                      <strong>Allowed For:</strong> {pg?.allowedFor}
+                    </p>
+                    {pg?.notAllowed?.length > 0 && (
+                      <p className="text-gray-600 text-sm">
+                        <strong>Not Allowed:</strong> {pg.notAllowed.join(", ")}
+                      </p>
+                    )}
+
+                    {/* Verified */}
+                    <p className={`text-sm font-semibold ${pg.verified ? "text-green-600" : "text-red-600"}`}>
+                      {pg.verified ? "Verified" : "Not Verified"}
+                    </p>
+
+                    {/* Facilities */}
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {pg?.facilities?.map((fac, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold shadow-sm"
+                        >
+                          {fac}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Rules */}
+                    {pg?.rules?.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-gray-600 font-medium text-sm">Rules:</p>
+                        <ul className="list-disc list-inside text-gray-500 text-sm">
+                          {pg.rules.map((rule, idx) => (
+                            <li key={idx}>{rule}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Publish Status */}
+                    {pg?.toPublish?.status && (
+                      <p className="text-gray-500 text-xs mt-2">
+                        Published on: {new Date(pg.toPublish.date).toLocaleDateString()}
+                      </p>
+                    )}
+
+                    {/* Divider */}
+                    <div className="border-b border-gray-200 my-2"></div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-gray-500 text-lg">
+                No Rooms Available
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </div>
-  </div>
-)}
+
 
 
 
@@ -315,7 +360,7 @@ export default function LandingPage() {
           <div className="mb-4">
             <label className="font-semibold">Facilities</label>
             <div className="grid grid-cols-2 gap-2 mt-2">
-              {[ "AC",
+              {["AC",
                 "Non-AC",
                 "Bathroom",
                 "WiFi",
@@ -324,16 +369,16 @@ export default function LandingPage() {
                 "CCTV",
                 "Parking",
                 "Refrigerator",
-                 "24x7 Electricity"].map((item) => (
-                <label key={item} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={filterValues.facilities.includes(item)}
-                    onChange={() => toggleFacility(item)}
-                  />
-                  {item}
-                </label>
-              ))}
+                "24x7 Electricity"].map((item) => (
+                  <label key={item} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={filterValues.facilities.includes(item)}
+                      onChange={() => toggleFacility(item)}
+                    />
+                    {item}
+                  </label>
+                ))}
             </div>
           </div>
 
