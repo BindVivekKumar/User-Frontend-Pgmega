@@ -21,8 +21,7 @@ export default function AboutUs() {
           <p className="text-center text-gray-600 max-w-4xl mx-auto mb-16 text-xl leading-relaxed">
             ROOMGI is India's next-generation accommodation ecosystem. We help users discover
             verified PGs, Hostels, and Hotels effortlessly — delivering trust, comfort, and
-            world-class user experience inspired by global platforms like <b>Airbnb</b> and
-            India’s hospitality pioneer <b>OYO</b>.
+            world-class user experience inspired by global platforms.
           </p>
 
           {/* MISSION + VISION */}
@@ -77,7 +76,7 @@ export default function AboutUs() {
 
               <div className="p-8 border rounded-3xl bg-white shadow hover:shadow-xl transition text-center">
                 <Users className="text-blue-600 mx-auto" size={52} />
-                <h3 className="text-xl font-semibold mt-6">For Students & Professionals</h3>
+                <h3 className="text-xl font-semibold mt-6">For All Individuals</h3>
                 <p className="text-gray-600 text-base mt-3 leading-relaxed">
                   Stays tailored for comfort, safety, affordability, and long-term living.
                 </p>
@@ -117,18 +116,35 @@ export default function AboutUs() {
           </div>
 
           {/* OUR JOURNEY */}
-          <div className="bg-white border rounded-3xl shadow-xl p-14">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Our Journey</h2>
-            <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto text-center">
-              ROOMGI was created to solve a real problem — the struggle to find trustworthy,
-              affordable accommodation in India. What started as a simple idea has become a
-              growing platform connecting thousands of users with verified stays.
-            </p>
-            <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto text-center mt-4">
-              With technology, transparency, and user-focused design at the core, we aim to
-              revolutionize India’s accommodation ecosystem one stay at a time.
-            </p>
-          </div>
+          {/* OUR JOURNEY */}
+<div className="bg-white border rounded-3xl shadow-xl p-14">
+  <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center tracking-wide">
+    Our Journey
+  </h2>
+
+  <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto mb-6">
+    ROOMGI was created to solve a real problem — the struggle to find trustworthy,
+    affordable accommodation in India. What started as a simple idea has now grown
+    into a powerful platform connecting thousands of users with verified and quality stays.
+  </p>
+
+  <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto mb-6">
+    With technology, transparency, and user-focused design at the core, we aim to
+    revolutionize India’s accommodation ecosystem one stay at a time.
+  </p>
+
+  <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
+    StayPass — Smarter, Faster & More Affordable Stays
+  </h3>
+
+
+
+  <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto mt-8">
+    Together, ROOMGI and StayPass are building a smarter, safer, and more
+    transparent way for India to find accommodation — one stay at a time.
+  </p>
+</div>
+
 
         </div>
       </main>
