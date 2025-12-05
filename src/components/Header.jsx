@@ -53,15 +53,19 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await logoutUser().unwrap();
-      dispatch(userLoggedout());
-      localStorage.removeItem("user");
-      setOpenDropdown(false);
-      toast.success("Logged out successfully");
+      await logoutUser().unwrap();   // Normal logout request
     } catch (err) {
-      console.log(err);
-      toast.error("Logout failed");
+      console.warn("Logout API failed, forcing logout...", err);
+      // Even if error happens, we still logout the user
     }
+
+    // 🔥 FORCE LOGOUT ALWAYS
+    dispatch(userLoggedout());
+    localStorage.removeItem("user");
+    setOpenDropdown(false);
+
+    toast.success("Logged out successfully");
+    navigate("/login");
   };
 
   return (
@@ -133,6 +137,13 @@ export default function Header() {
                     onClick={() => navigate("/Wishlistdetails")}
                   >
                     My Wishlist
+                  </button>
+
+                    <button
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-700"
+                    onClick={() => navigate("/mybooking")}
+                  >
+                    My Bookings
                   </button>
                   <button
                     onClick={handleLogout}

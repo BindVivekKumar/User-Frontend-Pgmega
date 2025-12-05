@@ -20,7 +20,11 @@ function AddRoomForm() {
     branch: "",
     category: "",
 
-    // New fields
+    renttype: "",
+    flattype: "",
+    roomtype: "",
+    hoteltype: "",
+
     description: "",
     notAllowed: [],
     rules: [],
@@ -34,7 +38,7 @@ function AddRoomForm() {
     rentperNight: "",
     city: "",
     capacity: "",
- 
+
   });
 
   const { refetch } = useGetAllRoomQuery();
@@ -88,7 +92,7 @@ function AddRoomForm() {
   };
 
   const handleAddRoom = async () => {
-      console.log(roomData)
+    console.log(roomData)
 
 
     const formData = new FormData();
@@ -100,7 +104,11 @@ function AddRoomForm() {
     formData.append("description", roomData.description);
     formData.append("allowedFor", roomData.allowedFor);
     formData.append("furnishedType", roomData.furnishedType);
-   
+    formData.append("flattype", roomData.flattype);
+    formData.append("roomtype", roomData.roomtype);
+    formData.append("hoteltype", roomData.hoteltype);
+    formData.append("renttype", roomData.renttype);
+
     formData.append("availabilityStatus", roomData.availabilityStatus);
 
     formData.append("rentperday", roomData.rentperday);
@@ -108,7 +116,7 @@ function AddRoomForm() {
     formData.append("rentperNight", roomData.rentperNight);
     formData.append("city", roomData.city);
     formData.append("capacity", roomData.capacity);
-  
+
     roomData.facilities.forEach(f => formData.append("facilities", f));
     roomData.notAllowed.forEach(f => formData.append("notAllowed", f));
     roomData.rules.forEach(f => formData.append("rules", f));
@@ -176,7 +184,7 @@ function AddRoomForm() {
           />
         </div>
 
-        
+
 
 
         <div>
@@ -271,33 +279,107 @@ function AddRoomForm() {
       </div>
 
       {/* Pricing */}
-      {(roomData.category === "Pg" || roomData.category === "Rented-Room") && (
-        <div className="mt-6">
-          <label className="label-style">Price (Per Month)</label>
-          <input
-            type="number"
-            className="input-style"
-            value={roomData.price}
-            onChange={e => setRoomData({ ...roomData, price: e.target.value })}
-          />
-        </div>
-      )}
-
-       {!roomData.category === "Pg"?
-        <></>:<><div>
-          <label className="label-style">Room Type</label>
+      {
+        roomData.category === "Pg" ? <>
+          <label className="label-style">Pg Type</label>
           <select
             className="input-style"
             value={roomData.type} // use category to store type
             onChange={(e) => setRoomData({ ...roomData, type: e.target.value })}
           >
-            <option value="">Select Room Type</option>
-            <option value="Single">single Room</option>
-            <option value="Double">double Room</option>
-            <option value="Triple">triple Room</option>
+            <option value="">Select Pg Type</option>
+            <option value="Single"> Single</option>
+            <option value="Double"> Double</option>
+            <option value="Triple">Triple</option>
+
           </select>
-        </div></>
+
+        </> : <></>
       }
+
+
+      {roomData.category === "Hotel" ?
+        <><div>
+          <label className="label-style">Hotel Type</label>
+          <select
+            className="input-style"
+            value={roomData.hoteltype} // use category to store type
+            onChange={(e) => setRoomData({ ...roomData, hoteltype: e.target.value })}
+          >
+            <option value="">Select Hotel Type</option>
+            <option value="Standard-Single">Standard Single</option>
+            <option value="Standard-Double">Standard Double</option>
+            <option value="Twin-Room">Twin Room</option>
+            <option value="Triple-Room">Triple Room</option>
+            <option value="Family-Room">Family Room</option>
+            <option value="Deluxe-Room">Deluxe Room</option>
+            <option value="Super-Deluxe-Room">Super Deluxe Room</option>
+            <option value="Executive-Room">Executive Room</option>
+            <option value="Suite">Suite</option>
+
+          </select>
+        </div></> : <></>
+      }
+      {roomData.category === "Rented-Room" && (
+        <div>
+
+          {/* 1️⃣ Select Rent Type FIRST */}
+          <label className="label-style">Rent Type</label>
+          <select
+            className="input-style"
+            value={roomData.renttype}
+            onChange={(e) =>
+              setRoomData({ ...roomData, renttype: e.target.value, roomtype: "", flattype: "" })
+            }
+          >
+            <option value="">Select Rent Type</option>
+            <option value="Flat-Rent">Flat Rent</option>
+            <option value="Room-Rent">Room Rent</option>
+          </select>
+
+          {/* 2️⃣ If Rent Type = Flat Rent → show Flat Type */}
+          {roomData.renttype === "Flat-Rent" && (
+            <div className="mt-3">
+              <label className="label-style">Flat Type</label>
+              <select
+                className="input-style"
+                value={roomData.flattype}
+                onChange={(e) =>
+                  setRoomData({ ...roomData, flattype: e.target.value })
+                }
+              >
+                <option value="">Select Flat Type</option>
+                <option value="1Rk">1RK</option>
+                <option value="1BHK">1BHK</option>
+                <option value="2BHK">2BHK</option>
+                <option value="3BHK">3BHK</option>
+                <option value="4BHK">4BHK</option>
+                <option value="5BHK">5BHK</option>
+              </select>
+            </div>
+          )}
+
+          {/* 3️⃣ If Rent Type = Room Rent → show Room Type */}
+          {roomData.renttype === "Room-Rent" && (
+            <div className="mt-3">
+              <label className="label-style">Room Type</label>
+              <select
+                className="input-style"
+                value={roomData.roomtype}
+                onChange={(e) =>
+                  setRoomData({ ...roomData, roomtype: e.target.value })
+                }
+              >
+                <option value="">Select Room Type</option>
+                <option value="Single">Single Room</option>
+                <option value="Double">Double Room</option>
+                <option value="Triple">Triple Room</option>
+              </select>
+            </div>
+          )}
+        </div>
+      )}
+
 
       {roomData.category === "Hotel" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -328,6 +410,17 @@ function AddRoomForm() {
               onChange={e => setRoomData({ ...roomData, rentperNight: e.target.value })}
             />
           </div>
+        </div>
+      )}
+      {(roomData.category !== "Hotel") && (
+        <div className="mt-6">
+          <label className="label-style">Price (Per Month)</label>
+          <input
+            type="number"
+            className="input-style"
+            value={roomData.price}
+            onChange={e => setRoomData({ ...roomData, price: e.target.value })}
+          />
         </div>
       )}
 

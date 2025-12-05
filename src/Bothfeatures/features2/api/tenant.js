@@ -38,6 +38,11 @@ const TenantApi = createApi({
                 url: `activetenant/${selectedBranch}`
             })
         }),
+         getbooking: builder.query({
+            query: () => ({
+                url: `bookings`
+            })
+        }),
         getAllTenantByBranchId: builder.query({
             query: (id) => ({
                 url: `GetTenantsByBranchid/${id}`
@@ -73,6 +78,7 @@ const TenantApi = createApi({
 
 });
 export const { useAddTenantMutation,
+    useGetbookingQuery,
     useOnlinepaidtenantMutation,
     useGetallactivetenantQuery,
     useGetStatusQuery,
