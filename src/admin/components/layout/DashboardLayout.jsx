@@ -15,7 +15,6 @@ export default function DashboardLayout() {
     { id: "properties", label: "Properties", path: "/admin/properties" },
     { id: "tenants", label: "Tenants", path: "/admin/tenants" },
     { id: "payments", label: "Payments", path: "/admin/payments" },
-    { id: "hotelRoom", label: "Hotel Room", path: "/admin/AddHotelRoom" },
     { id: "rooms", label: "Rooms", path: "/admin/ShowRooms" },
     { id: "staff", label: "Staff & Utilities", path: "/admin/staff" },
   ];

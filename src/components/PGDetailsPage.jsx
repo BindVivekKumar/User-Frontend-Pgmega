@@ -93,8 +93,15 @@ export default function PGDetailsPage() {
   }, []);
 
   const handleBook = (amount) => {
-    // if (!isAuthenticated) return setIsAuthModalOpen(true);
-    startPayment(amount, razorpayPayment, razorpayPaymentVerify, id, onlinepaidtenant)
+    console.log(isAuthenticated)
+    if (!isAuthenticated) {
+      toast.error("Logged In  first")
+
+    }
+    else {
+      startPayment(amount, razorpayPayment, razorpayPaymentVerify, id, onlinepaidtenant)
+
+    }
   };
 
   const handleGetDirections = () => {
@@ -299,10 +306,20 @@ export default function PGDetailsPage() {
                     </p>
                   </div>
 
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500 font-medium">Occupied</span>
-                    <p className="text-lg font-semibold text-gray-800 tracking-wide"> {pg.occupied || "0"}</p>
+                  <div className="flex gap-6 mt-4">
+
+                    <div className="flex flex-col items-center backdrop-blur-xl bg-white/40 px-6 py-3 rounded-2xl shadow-lg border border-white/30">
+                      <span className="text-sm font-medium text-gray-600">Occupied</span>
+                      <p className="text-3xl font-extrabold text-red-600 drop-shadow-sm">{pg.occupied || "0"}</p>
+                    </div>
+
+                    <div className="flex flex-col items-center backdrop-blur-xl bg-white/40 px-6 py-3 rounded-2xl shadow-lg border border-white/30">
+                      <span className="text-sm font-medium text-gray-600">Vacant</span>
+                      <p className="text-3xl font-extrabold text-green-600 drop-shadow-sm">{pg.vacant || "0"}</p>
+                    </div>
+
                   </div>
+
 
                 </div>
               </div>
@@ -396,30 +413,42 @@ export default function PGDetailsPage() {
               ) : pg.category === "Pg" ? (
                 // Monthly PG Booking
                 <button
-                  onClick={() => handleBook(pg.price)}
-                  disabled={pg.availabilityStatus !== "Available"}
-                  className={`flex flex-col items-center justify-center gap-2 w-full py-4 rounded-xl font-semibold shadow-lg ${pg.availabilityStatus === "Available"
-                    ? "bg-blue-600 text-white hover:bg-blue-700 transition transform hover:-translate-y-1 hover:scale-105"
-                    : "bg-gray-300 text-gray-600 cursor-not-allowed relative group overflow-hidden"
+                  onClick={() => isAuthenticated && pg.availabilityStatus === "Available" && handleBook(pg.price)}
+                  disabled={pg.availabilityStatus !== "Available" || !isAuthenticated}
+                  className={`flex flex-col items-center justify-center gap-2 w-full py-4 rounded-xl font-semibold shadow-lg
+    ${pg.availabilityStatus === "Available" && isAuthenticated
+                      ? "bg-blue-600 text-white hover:bg-blue-700 transition transform hover:-translate-y-1 hover:scale-105"
+                      : "bg-gray-300 text-gray-600 cursor-not-allowed relative group overflow-hidden"
                     }`}
                 >
                   <span className="text-lg">
                     {pg.availabilityStatus === "Available"
-                      ? "Monthly Booking"
+                      ? (isAuthenticated ? "Monthly Booking" : "Login to Book")
                       : (
                         <>
                           <span className="line-through">Monthly Booking</span>
-                          <span className="text-red-500">✖</span>
+                          <span className="text-red-500"> ✖ </span>
                         </>
                       )}
                   </span>
+
                   <span className="text-sm">₹{pg.price} / month</span>
+
+                  {/* Tooltip for unavailable */}
                   {pg.availabilityStatus !== "Available" && (
                     <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
                       Booking not available
                     </span>
                   )}
+
+                  {/* Tooltip for unauthenticated */}
+                  {!isAuthenticated && pg.availabilityStatus === "Available" && (
+                    <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-blue-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+                      Login required
+                    </span>
+                  )}
                 </button>
+
               ) : (
                 // Non-PG: show available rates
                 <div className="w-full flex flex-col gap-4">
@@ -428,8 +457,8 @@ export default function PGDetailsPage() {
                       onClick={() => handleBook(pg.rentperNight)}
                       disabled={pg.occupied !== 0}
                       className={`flex justify-between items-center w-full py-4 px-6 rounded-xl font-semibold shadow-lg transition transform ${pg.occupied === 0
-                          ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 hover:-translate-y-1 hover:scale-105"
-                          : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
+                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 hover:-translate-y-1 hover:scale-105"
+                        : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
                         }`}
                     >
                       <div className="flex flex-col text-left">
@@ -458,8 +487,8 @@ export default function PGDetailsPage() {
                       onClick={() => handleBook(pg.rentperday)}
                       disabled={pg.occupied !== 0}
                       className={`flex justify-between items-center w-full py-4 px-6 rounded-xl font-semibold shadow-lg transition transform ${pg.occupied === 0
-                          ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 hover:-translate-y-1 hover:scale-105"
-                          : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
+                        ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 hover:-translate-y-1 hover:scale-105"
+                        : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
                         }`}
                     >
                       <div className="flex flex-col text-left">
@@ -488,8 +517,8 @@ export default function PGDetailsPage() {
                       onClick={() => handleBook(pg.rentperhour)}
                       disabled={pg.occupied !== 0}
                       className={`flex justify-between items-center w-full py-4 px-6 rounded-xl font-semibold shadow-lg transition transform ${pg.occupied === 0
-                          ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 hover:-translate-y-1 hover:scale-105"
-                          : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
+                        ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 hover:-translate-y-1 hover:scale-105"
+                        : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
                         }`}
                     >
                       <div className="flex flex-col text-left">

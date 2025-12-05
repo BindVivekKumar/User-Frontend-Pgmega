@@ -28,6 +28,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { hydrateUser } from "./Bothfeatures/features/authSlice";
 import ProtectedRoute from "./userprotectedroutes";
+import Bookings from "./components/booking";
 
 
 function App() {
@@ -92,6 +93,7 @@ function App() {
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/termsandcondition" element={<TermsConditions />} />
+          <Route path="/mybooking" element={<Bookings />} />
           <Route path="/shippingpolicy" element={<ShippingPolicy />} />
           <Route path="/helpcenter" element={<HelpCenter />} />
           <Route path="/faqs" element={<FAQs />} />
