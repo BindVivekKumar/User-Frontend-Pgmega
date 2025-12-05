@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import LandingPage from './components/LandingPage';
+import WishlistDetails from "./components/mywishlist";
 import PGDetailsPage from './components/PGDetailsPage';
 import PGMap from "./components/pgmap.jsx";
 import AuthModal from "./components/AuthModal";
@@ -72,41 +73,42 @@ function App() {
       )}
 
       {/* Main content */}
-     <main className="flex-1">
-  <Routes>
+      <main className="flex-1">
+        <Routes>
 
-    {/* Protected Routes */}
-    <Route element={<ProtectedRoute />}>
-      <Route path="/" element={<LandingPage />} />
-       <Route path="/allpotos/:id" element={<AllPotos />} />
-      <Route path="/pg/:id" element={<PGDetailsPage />} />
-      <Route path="/PGMap/:branchId" element={<PGMap />} />
-      <Route path="/Wishlist" element={<Wishlist />} />
-       <Route path="/search/:city" element={<Searched />} />
-    </Route>
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/allpotos/:id" element={<AllPotos />} />
+            <Route path="/pg/:id" element={<PGDetailsPage />} />
+            <Route path="/PGMap/:branchId" element={<PGMap />} />
+            <Route path="/Wishlist" element={<Wishlist />} />
+            <Route path="/Wishlistdetails" element={<WishlistDetails />} />
+            <Route path="/search/:city" element={<Searched />} />
+          </Route>
 
-    {/* Public Routes */}
-    <Route path="/CancellationPolicy" element={<CancellationPolicy />} />
-    <Route path="/contactus" element={<ContactUs />} />
-    <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-    <Route path="/termsandcondition" element={<TermsConditions />} />
-    <Route path="/shippingpolicy" element={<ShippingPolicy />} />
-    <Route path="/helpcenter" element={<HelpCenter />} />
-    <Route path="/faqs" element={<FAQs />} />
-    <Route path="/customersupport" element={<CustomerSupport />} />
-    <Route path="/partnerwithroomgi" element={<PartnerWithRoomgi />} />
-    <Route path="/aboutus" element={<AboutUs />} />
-    <Route path="/about" element={<About />} />
-    <Route path="/contact" element={<Contact />} />
+          {/* Public Routes */}
+          <Route path="/CancellationPolicy" element={<CancellationPolicy />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/termsandcondition" element={<TermsConditions />} />
+          <Route path="/shippingpolicy" element={<ShippingPolicy />} />
+          <Route path="/helpcenter" element={<HelpCenter />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/customersupport" element={<CustomerSupport />} />
+          <Route path="/partnerwithroomgi" element={<PartnerWithRoomgi />} />
+          <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
 
-    {/* Admin */}
-    <Route path="/admin/*" element={<AdminApp />} />
+          {/* Admin */}
+          <Route path="/admin/*" element={<AdminApp />} />
 
-    {/* Auth */}
-    <Route path="/login" element={<AuthModal />} />
+          {/* Auth */}
+          <Route path="/login" element={<AuthModal />} />
 
-  </Routes>
-</main>
+        </Routes>
+      </main>
 
 
       {/* Conditional Footer */}

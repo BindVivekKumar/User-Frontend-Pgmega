@@ -8,6 +8,7 @@ import { userLoggedout, hydrateUser } from "../Bothfeatures/features/authSlice";
 import { toast } from "react-toastify";
 
 export default function Header() {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -129,7 +130,7 @@ export default function Header() {
                   </button>
                   <button
                     className="w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-700"
-                    onClick={() => navigate("/wishlist")}
+                    onClick={() => navigate("/Wishlistdetails")}
                   >
                     My Wishlist
                   </button>

@@ -33,10 +33,10 @@ const authApi = createApi({
       })
     }),
     toggleWishlist: builder.mutation({
-      query: (pgId) => ({
+      query: ({pgId,branchId}) => ({
         url: "/wishlist/toggle",
         method: "POST",
-        body: { pgId },
+        body: {pgId,branchId},
       }),
     }),
 

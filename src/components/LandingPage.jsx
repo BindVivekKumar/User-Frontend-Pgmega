@@ -32,8 +32,9 @@ export default function LandingPage() {
   const [wishlistIds, setWishlistIds] = useState([]);
 
   useEffect(() => {
-    if (pgApiData?.foundBranch) {
-      setPgData(pgApiData.foundBranch);
+    console.log(pgApiData?.allrooms)
+    if (pgApiData?.allrooms) {
+      setPgData(pgApiData.allrooms);
     }
     if (wishlistData?.data) {
       const pgIds = wishlistData.data.map(item => item.pgId);
