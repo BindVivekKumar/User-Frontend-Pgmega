@@ -33,7 +33,7 @@ async function startPayment(amount, razorpayPayment, razorpayPaymentVerify, id, 
       description: "PG/hotel/rental room Booking Payment",
       order_id: order.id,
 
-      handler: async function (response ) {
+      handler: async function (response) {
         const { data: verifyData, error: verifyError } = await razorpayPaymentVerify({
           razorpay_order_id: response.razorpay_order_id,
           razorpay_payment_id: response.razorpay_payment_id,
@@ -79,7 +79,7 @@ export default function PGDetailsPage() {
   const allImages = useMemo(() => {
     if (!pg) return [];
     const roomImages = pg.roomImages || [];
-    return [ ...roomImages];
+    return [...roomImages];
   }, [pg]);
 
   // Get user location
@@ -94,7 +94,7 @@ export default function PGDetailsPage() {
 
   const handleBook = (amount) => {
     // if (!isAuthenticated) return setIsAuthModalOpen(true);
-    startPayment(amount, razorpayPayment, razorpayPaymentVerify, id,onlinepaidtenant)
+    startPayment(amount, razorpayPayment, razorpayPaymentVerify, id, onlinepaidtenant)
   };
 
   const handleGetDirections = () => {
@@ -301,7 +301,7 @@ export default function PGDetailsPage() {
 
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500 font-medium">Occupied</span>
-                    <p className="text-lg font-semibold text-gray-800 tracking-wide"> {pg.count || "N/A"}</p>
+                    <p className="text-lg font-semibold text-gray-800 tracking-wide"> {pg.occupied || "0"}</p>
                   </div>
 
                 </div>
@@ -374,50 +374,150 @@ export default function PGDetailsPage() {
           {/* RENT CARD */}
           <InfoBlock title="Rent Details">
             <div className="text-center py-4">
-              <p className="text-gray-500 text-sm">Rent per Month</p>
-              <h3 className="text-4xl font-bold text-gray-900 mt-1">₹{pg.price}</h3>
+              <p className="text-gray-500 text-sm">
+                {pg.category === "Pg" ? "Rent per Month" : "Rent Options"}
+              </p>
+              <h3 className="text-4xl font-bold text-gray-900 mt-1">
+                {pg.category === "Pg"
+                  ? `₹${pg.price}`
+                  : <></>}
+              </h3>
             </div>
-            <div className="w-full">
+
+            <div className="w-full flex flex-col gap-2">
               {razorpaypaymentloading ? (
-                <button disabled className="flex items-center justify-center gap-2 w-full bg-blue-600 text-white py-4 rounded-xl font-semibold shadow-lg cursor-not-allowed hover:bg-blue-600 transition transform">
+                <button
+                  disabled
+                  className="flex items-center justify-center gap-2 w-full bg-blue-600 text-white py-4 rounded-xl font-semibold shadow-lg cursor-not-allowed hover:bg-blue-600 transition transform"
+                >
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>Processing Payment...</span>
                 </button>
-              ) : (<>
-                {pg.availabilityStatus === "Available" ? (
-                  <button
-                    onClick={() => handleBook(pg.price)}
-                    className="flex flex-col items-center justify-center gap-2 w-full bg-blue-600 text-white py-4 rounded-xl font-semibold shadow-lg 
-               hover:bg-blue-700 transition transform hover:-translate-y-1 hover:scale-105"
-                  >
-                    <span className="text-lg">Monthly Booking</span>
-                    <span className="text-sm">₹{pg.price} / month</span>
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="flex flex-col items-center justify-center gap-2 w-full bg-gray-300 text-gray-600 py-4 rounded-xl font-semibold shadow-inner 
-               cursor-not-allowed relative group overflow-hidden"
-                  >
-                    <span className="text-lg flex items-center gap-2">
-                      <span className="line-through">Monthly Booking</span>
-                      <span className="text-red-500">✖</span>
-                    </span>
-                    <span className="text-sm">Currently Occupied</span>
-
-
+              ) : pg.category === "Pg" ? (
+                // Monthly PG Booking
+                <button
+                  onClick={() => handleBook(pg.price)}
+                  disabled={pg.availabilityStatus !== "Available"}
+                  className={`flex flex-col items-center justify-center gap-2 w-full py-4 rounded-xl font-semibold shadow-lg ${pg.availabilityStatus === "Available"
+                    ? "bg-blue-600 text-white hover:bg-blue-700 transition transform hover:-translate-y-1 hover:scale-105"
+                    : "bg-gray-300 text-gray-600 cursor-not-allowed relative group overflow-hidden"
+                    }`}
+                >
+                  <span className="text-lg">
+                    {pg.availabilityStatus === "Available"
+                      ? "Monthly Booking"
+                      : (
+                        <>
+                          <span className="line-through">Monthly Booking</span>
+                          <span className="text-red-500">✖</span>
+                        </>
+                      )}
+                  </span>
+                  <span className="text-sm">₹{pg.price} / month</span>
+                  {pg.availabilityStatus !== "Available" && (
                     <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
                       Booking not available
                     </span>
-                  </button>
-                )}
+                  )}
+                </button>
+              ) : (
+                // Non-PG: show available rates
+                <div className="w-full flex flex-col gap-4">
+                  {pg?.rentperNight && (
+                    <button
+                      onClick={() => handleBook(pg.rentperNight)}
+                      disabled={pg.occupied !== 0}
+                      className={`flex justify-between items-center w-full py-4 px-6 rounded-xl font-semibold shadow-lg transition transform ${pg.occupied === 0
+                          ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 hover:-translate-y-1 hover:scale-105"
+                          : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
+                        }`}
+                    >
+                      <div className="flex flex-col text-left">
+                        <span className="text-lg font-bold">
+                          {pg.occupied === 0 ? "Booking per Night" : (
+                            <>
+                              <span className="line-through">Booking per Night</span>
+                              <span className="text-red-500 ml-1">✖</span>
+                            </>
+                          )}
+                        </span>
+                        <span className="text-sm mt-1">
+                          ₹{pg.rentperNight} / night
+                        </span>
+                      </div>
+                      {pg.occupied !== 0 && (
+                        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+                          Booking not available
+                        </span>
+                      )}
+                    </button>
+                  )}
 
-              </>
+                  {pg?.rentperday && (
+                    <button
+                      onClick={() => handleBook(pg.rentperday)}
+                      disabled={pg.occupied !== 0}
+                      className={`flex justify-between items-center w-full py-4 px-6 rounded-xl font-semibold shadow-lg transition transform ${pg.occupied === 0
+                          ? "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 hover:-translate-y-1 hover:scale-105"
+                          : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
+                        }`}
+                    >
+                      <div className="flex flex-col text-left">
+                        <span className="text-lg font-bold">
+                          {pg.occupied === 0 ? "Booking per Day" : (
+                            <>
+                              <span className="line-through">Booking per Day</span>
+                              <span className="text-red-500 ml-1">✖</span>
+                            </>
+                          )}
+                        </span>
+                        <span className="text-sm mt-1">
+                          ₹{pg.rentperday} / day
+                        </span>
+                      </div>
+                      {pg.occupied !== 0 && (
+                        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+                          Booking not available
+                        </span>
+                      )}
+                    </button>
+                  )}
 
+                  {pg?.rentperhour && (
+                    <button
+                      onClick={() => handleBook(pg.rentperhour)}
+                      disabled={pg.occupied !== 0}
+                      className={`flex justify-between items-center w-full py-4 px-6 rounded-xl font-semibold shadow-lg transition transform ${pg.occupied === 0
+                          ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700 hover:-translate-y-1 hover:scale-105"
+                          : "bg-gray-200 text-gray-500 cursor-not-allowed relative group"
+                        }`}
+                    >
+                      <div className="flex flex-col text-left">
+                        <span className="text-lg font-bold">
+                          {pg.occupied === 0 ? "Booking per Hour" : (
+                            <>
+                              <span className="line-through">Booking per Hour</span>
+                              <span className="text-red-500 ml-1">✖</span>
+                            </>
+                          )}
+                        </span>
+                        <span className="text-sm mt-1">
+                          ₹{pg.rentperhour} / hour
+                        </span>
+                      </div>
+                      {pg.occupied !== 0 && (
+                        <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+                          Booking not available
+                        </span>
+                      )}
+                    </button>
+                  )}
+                </div>
 
               )}
             </div>
           </InfoBlock>
+
 
           {/* ACTION BUTTONS */}
           <InfoBlock title="Actions">
