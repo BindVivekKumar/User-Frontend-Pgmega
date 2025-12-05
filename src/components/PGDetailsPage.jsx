@@ -78,9 +78,8 @@ export default function PGDetailsPage() {
 
   const allImages = useMemo(() => {
     if (!pg) return [];
-    const branchImages = pg.branch?.Propertyphoto || [];
     const roomImages = pg.roomImages || [];
-    return [...branchImages, ...roomImages];
+    return [ ...roomImages];
   }, [pg]);
 
   // Get user location
