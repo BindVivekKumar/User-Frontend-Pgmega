@@ -56,10 +56,9 @@ export default function Header() {
       await logoutUser().unwrap();   // Normal logout request
     } catch (err) {
       console.warn("Logout API failed, forcing logout...", err);
-      // Even if error happens, we still logout the user
     }
 
-    // 🔥 FORCE LOGOUT ALWAYS
+    // FORCE LOGOUT
     dispatch(userLoggedout());
     localStorage.removeItem("user");
     setOpenDropdown(false);
@@ -71,6 +70,7 @@ export default function Header() {
   return (
     <header className="backdrop-blur-xl bg-white/80 shadow-sm sticky top-0 z-50 border-b">
       <div className="max-w-7xl mx-auto px-4 py-1 flex justify-between items-center">
+
         {/* LOGO */}
         <img
           src={logo}
@@ -139,12 +139,13 @@ export default function Header() {
                     My Wishlist
                   </button>
 
-                    <button
+                  <button
                     className="w-full px-4 py-2 text-left hover:bg-gray-100 text-gray-700"
                     onClick={() => navigate("/mybooking")}
                   >
                     My Bookings
                   </button>
+
                   <button
                     onClick={handleLogout}
                     className="w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100 flex items-center justify-center"
@@ -169,6 +170,7 @@ export default function Header() {
       {/* MOBILE MENU */}
       {mobileMenu && (
         <div ref={mobileMenuRef} className="md:hidden px-6 pb-4 space-y-4 animate-slideDown bg-white shadow-lg border-t">
+
           <button
             onClick={() => { setMobileMenu(false); navigate("/"); }}
             className="block w-full text-left px-2 py-2 text-gray-700 font-medium text-lg"
@@ -199,18 +201,40 @@ export default function Header() {
 
           {isAuthenticated ? (
             <>
-              <button onClick={() => navigate("/profile")} className="block w-full text-left px-4 py-2 text-gray-800 text-lg">
+              <button
+                onClick={() => { setMobileMenu(false); navigate("/profile"); }}
+                className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
+              >
                 Profile
               </button>
-              <button onClick={() => navigate("/wishlist")} className="block w-full text-left px-4 py-2 text-gray-800 text-lg">
+
+              <button
+                onClick={() => { setMobileMenu(false); navigate("/wishlist"); }}
+                className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
+              >
                 My Wishlist
               </button>
-              <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-red-600 text-lg">
+
+              {/* ✅ ADDED THIS */}
+              <button
+                onClick={() => { setMobileMenu(false); navigate("/mybooking"); }}
+                className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
+              >
+                My Bookings
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-4 py-2 text-red-600 text-lg"
+              >
                 Logout
               </button>
             </>
           ) : (
-            <button onClick={() => navigate("/login")} className="w-full py-2 rounded-lg bg-blue-600 text-white text-lg">
+            <button
+              onClick={() => { setMobileMenu(false); navigate("/login"); }}
+              className="w-full py-2 rounded-lg bg-blue-600 text-white text-lg"
+            >
               Sign In / Sign Up
             </button>
           )}
