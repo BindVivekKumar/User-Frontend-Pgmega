@@ -132,8 +132,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* PG LIST */}
-      <div className="max-w-7xl mx-auto py-10 sm:py-16">
+     <div className="max-w-7xl mx-auto py-10 sm:py-16">
         <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-gray-900">Available Rooms & PGs</h2>
         {isLoading ? (
           <Loader />
@@ -204,7 +203,7 @@ export default function LandingPage() {
                   </div>
 
                   <p className={`text-xs sm:text-sm font-semibold mt-1 ${pg.verified ? "text-green-600" : "text-red-500"}`}>
-                    {pg.verified ? "✔ Verified " : "⛔ Not Verified"}
+                    {pg.verified ? "✔ Verified Host" : "⛔ Not Verified"}
                   </p>
 
                   <div className="mt-3 sm:mt-4 flex justify-between items-center">
@@ -215,7 +214,7 @@ export default function LandingPage() {
                     </p>
                     <p className="text-xs sm:text-sm text-gray-500 font-medium">
                       {pg.category === "Pg" ? (
-                        `${pg.occupied}/${pg.vacant} occupied`
+                        `${pg.occupied}/${pg.occupied+pg.vacant} occupied`
                       ) : pg.category === "Hotel" ? (
                         `${pg.occupied}/${1} occupied`
                       ) : pg.category === "Rented-Room" ? (
