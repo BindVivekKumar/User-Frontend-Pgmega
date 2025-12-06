@@ -53,12 +53,9 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await logoutUser().unwrap();   // Normal logout request
-    } catch (err) {
-      console.warn("Logout API failed, forcing logout...", err);
-    }
+      await logoutUser().unwrap();
+    } catch (err) {}
 
-    // FORCE LOGOUT
     dispatch(userLoggedout());
     localStorage.removeItem("user");
     setOpenDropdown(false);
@@ -209,13 +206,12 @@ export default function Header() {
               </button>
 
               <button
-                onClick={() => { setMobileMenu(false); navigate("/wishlist"); }}
+                onClick={() => { setMobileMenu(false); navigate("/Wishlistdetails"); }}
                 className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
               >
                 My Wishlist
               </button>
 
-              {/* ✅ ADDED THIS */}
               <button
                 onClick={() => { setMobileMenu(false); navigate("/mybooking"); }}
                 className="block w-full text-left px-4 py-2 text-gray-800 text-lg"
