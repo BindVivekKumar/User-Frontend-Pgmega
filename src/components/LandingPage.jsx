@@ -82,42 +82,51 @@ export default function LandingPage() {
 
       {/* HERO */}
       <div
-        className="relative bg-cover bg-center h-[400px] sm:h-[500px] md:h-[550px] rounded-b-3xl shadow-xl"
-        style={{
-          backgroundImage:
-            'linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.65)), url(https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260)'
-        }}
+        className="relative h-[380px] sm:h-[480px] md:h-[550px] lg:h-[600px] rounded-b-3xl overflow-hidden shadow-xl"
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4">
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold drop-shadow-lg tracking-tight animate-fadeIn">
+        {/* Background Image + Overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260')"
+          }}
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/75"></div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight drop-shadow-xl animate-fadeIn">
             Find Your Perfect Stay
           </h2>
-          <p className="text-base sm:text-lg md:text-2xl mt-2 sm:mt-3 text-white/90 font-medium animate-fadeIn delay-150">
+
+          <p className="text-sm sm:text-base md:text-xl lg:text-2xl mt-3 text-white/90 font-medium animate-fadeIn delay-150">
             Safe • Comfortable • Affordable — Just Like Home
           </p>
 
-          {/* SEARCH BAR */}
-          <div className="w-full max-w-3xl mt-8 sm:mt-12 animate-slideUp">
-            <div
-              className="bg-white/25 backdrop-blur-xl shadow-2xl rounded-full p-3 border border-white/20 flex items-center gap-2"
-            >
+          {/* Search Bar */}
+          <div className="w-full max-w-xl sm:max-w-2xl mt-8 animate-slideUp">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full px-3 py-2 sm:px-4 sm:py-3 shadow-lg">
               <input
                 type="text"
-                placeholder="Search by location, landmark, or property name..."
+                placeholder="Search by city, landmark or property..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleFindPG()}
-                className="flex-1 bg-transparent text-white placeholder-white/70 px-4 py-2 sm:py-3 text-base sm:text-lg focus:outline-none"
+                onKeyDown={(e) => e.key === 'Enter' && handleFindPG()}
+                className="flex-1 bg-transparent text-white placeholder-white/60 px-2 sm:px-4 py-2 text-sm sm:text-base focus:outline-none"
               />
+
               <button
                 onClick={handleFindPG}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all text-base sm:text-lg font-semibold"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-sm sm:text-lg font-semibold"
               >
                 Search
               </button>
             </div>
+
             {searchError && (
-              <p className="text-red-300 text-sm mt-2 sm:mt-3 text-center">{searchError}</p>
+              <p className="text-red-300 text-sm mt-2 text-center">{searchError}</p>
             )}
           </div>
         </div>
@@ -195,18 +204,34 @@ export default function LandingPage() {
                   </div>
 
                   <p className={`text-xs sm:text-sm font-semibold mt-1 ${pg.verified ? "text-green-600" : "text-red-500"}`}>
-                    {pg.verified ? "✔ Verified Host" : "⛔ Not Verified"}
+                    {pg.verified ? "✔ Verified " : "⛔ Not Verified"}
                   </p>
 
                   <div className="mt-3 sm:mt-4 flex justify-between items-center">
                     <p className="text-lg sm:text-xl font-bold text-gray-900">
-                      {pg?.category === "Pg"||pg.category === "Rented-Room"
+                      {pg?.category === "Pg" || pg.category === "Rented-Room"
                         ? `₹${pg?.price}/month`
                         : `₹${pg?.rentperNight}/night`}
                     </p>
                     <p className="text-xs sm:text-sm text-gray-500 font-medium">
-                      {pg?.occupied}/{pg?.count} occupied
+                      {pg.category === "Pg" ? (
+                        `${pg.occupied}/${pg.vacant} occupied`
+                      ) : pg.category === "Hotel" ? (
+                        `${pg.occupied}/${1} occupied`
+                      ) : pg.category === "Rented-Room" ? (
+                        pg.renttype === "Flat-Rent" ? (
+                          `${pg.occupied}/${1} occupied`
+                        ) : pg.renttype === "Room-Rent" ? (
+                          `${pg.occupied}/${1} occupied`
+                        ) : (
+                          ""
+                        )
+                      ) : (
+                        ""
+                      )}
                     </p>
+
+
                   </div>
                 </div>
               </div>
@@ -225,7 +250,7 @@ export default function LandingPage() {
         <p className="text-gray-600 mb-8 sm:mb-10">Choose your city and discover the best rooms near you.</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full max-w-6xl mx-auto">
-          {["Delhi","Noida","Gurgaon","Bangalore","Chennai","Hyderabad","Pune","Mumbai"].map((city) => (
+          {["Delhi", "Noida", "Gurgaon", "Bangalore", "Chennai", "Hyderabad", "Pune", "Mumbai"].map((city) => (
             <button
               key={city}
               onClick={() => toast.success(`We are coming soon in ${city}`)}
