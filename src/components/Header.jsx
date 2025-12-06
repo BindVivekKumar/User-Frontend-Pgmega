@@ -37,11 +37,9 @@ export default function Header() {
     }
   }, [dispatch]);
 
-
-  // Close dropdown + mobile menu when clicking outside
+  // Close desktop dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Close desktop dropdown
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpenDropdown(false);
       }
@@ -50,8 +48,7 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
-  // ✅ FIXED: Close mobile menu when clicking anywhere outside (except menu button)
+  // Close mobile menu when clicking outside
   useEffect(() => {
     const closeMobileOnOutsideClick = (e) => {
       if (
@@ -68,6 +65,20 @@ export default function Header() {
     return () => document.removeEventListener("click", closeMobileOnOutsideClick);
   }, [mobileMenu]);
 
+  // ✅ FIX: Close mobile menu on scroll or swipe (touchmove)
+  useEffect(() => {
+    const closeOnScroll = () => {
+      if (mobileMenu) setMobileMenu(false);
+    };
+
+    window.addEventListener("scroll", closeOnScroll);
+    window.addEventListener("touchmove", closeOnScroll);
+
+    return () => {
+      window.removeEventListener("scroll", closeOnScroll);
+      window.removeEventListener("touchmove", closeOnScroll);
+    };
+  }, [mobileMenu]);
 
   const handleLogout = async () => {
     try {
