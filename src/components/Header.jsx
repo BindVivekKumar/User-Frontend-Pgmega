@@ -37,19 +37,37 @@ export default function Header() {
     }
   }, [dispatch]);
 
-  // Close dropdown if clicked outside
+
+  // Close dropdown + mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close desktop dropdown
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpenDropdown(false);
-      }
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
-        setMobileMenu(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+
+  // ✅ FIXED: Close mobile menu when clicking anywhere outside (except menu button)
+  useEffect(() => {
+    const closeMobileOnOutsideClick = (e) => {
+      if (
+        mobileMenu &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target) &&
+        !e.target.closest(".mobile-menu-btn")
+      ) {
+        setMobileMenu(false);
+      }
+    };
+
+    document.addEventListener("click", closeMobileOnOutsideClick);
+    return () => document.removeEventListener("click", closeMobileOnOutsideClick);
+  }, [mobileMenu]);
+
 
   const handleLogout = async () => {
     try {
@@ -157,7 +175,7 @@ export default function Header() {
 
         {/* MOBILE MENU BUTTON */}
         <button
-          className="md:hidden ml-3"
+          className="md:hidden ml-3 mobile-menu-btn"
           onClick={() => setMobileMenu((prev) => !prev)}
         >
           <Menu className="w-8 h-8" />
@@ -174,12 +192,14 @@ export default function Header() {
           >
             Home
           </button>
+
           <button
             onClick={() => { setMobileMenu(false); navigate("/about"); }}
             className="block w-full text-left px-2 py-2 text-gray-700 font-medium text-lg"
           >
             About
           </button>
+
           <button
             onClick={() => { setMobileMenu(false); navigate("/contact"); }}
             className="block w-full text-left px-2 py-2 text-gray-700 font-medium text-lg"
