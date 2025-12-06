@@ -8,26 +8,39 @@ import { useGetAllListedPgQuery } from "../Bothfeatures/features/api/allpg.js";
 import { useGetWishlistQuery } from "../Bothfeatures/features/api/authapi";
 
 export default function LandingPage() {
-
   const navigate = useNavigate();
   const { data: wishlistData } = useGetWishlistQuery();
   const { data: pgApiData, isLoading } = useGetAllListedPgQuery();
 
   const [pgData, setPgData] = useState([]);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchError, setSearchError] = useState('');
+
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterValues, setFilterValues] = useState({
+    type: '',
+    rating: '',
+    place: '',
+    distance: 10,
+    rentMin: 0,
+    rentMax: 20000,
+    facilities: [],
+  });
+
   const [wishlistIds, setWishlistIds] = useState([]);
 
   useEffect(() => {
-    if (pgApiData?.allrooms) setPgData(pgApiData.allrooms);
-
+    console.log(pgApiData?.allrooms)
+    if (pgApiData?.allrooms) {
+      setPgData(pgApiData.allrooms);
+    }
     if (wishlistData?.data) {
-      const ids = wishlistData.data.map(item => item.pgId);
-      setWishlistIds(ids);
+      const pgIds = wishlistData.data.map(item => item.pgId);
+      setWishlistIds(pgIds);
     }
   }, [pgApiData, wishlistData]);
-
 
   const handleFindPG = () => {
     setSearchError('');
@@ -36,6 +49,24 @@ export default function LandingPage() {
       return;
     }
     navigate(`/search/${searchQuery}`);
+  };
+
+  const updateFilter = (key, value) => {
+    setFilterValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  const toggleFacility = (facility) => {
+    setFilterValues(prev => ({
+      ...prev,
+      facilities: prev.facilities.includes(facility)
+        ? prev.facilities.filter(f => f !== facility)
+        : [...prev.facilities, facility],
+    }));
+  };
+
+  const applyFilters = () => {
+    console.log("Selected Filters:", filterValues);
+    setShowFilters(false);
   };
 
   function Loader() {
@@ -47,140 +78,182 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-gray-100 to-gray-200 px-2 sm:px-4">
 
-      {/* ---------------------------------------------------- */}
-      {/* 🔥 FULL WIDTH HERO SECTION (CLICK FIXED) */}
-      {/* ---------------------------------------------------- */}
-      <section className="relative -z-10 w-full h-[450px] sm:h-[550px] md:h-[600px] overflow-hidden">
-
-
-        {/* Background Image */}
-        <img
-          src="https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260"
-          alt="Room"
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      {/* HERO */}
+      <div
+        className="relative h-[380px] sm:h-[480px] md:h-[550px] lg:h-[600px] rounded-b-3xl overflow-hidden shadow-xl"
+      >
+        {/* Background Image + Overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260')"
+          }}
         />
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/75"></div>
 
-        {/* Foreground Content (clickable) */}
-        <div className="relative z-10 pointer-events-auto flex flex-col items-center justify-center h-full px-4 text-center text-white">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight drop-shadow-xl">
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight drop-shadow-xl animate-fadeIn">
             Find Your Perfect Stay
-          </h1>
+          </h2>
 
-          <p className="mt-3 text-lg sm:text-xl text-white/80 font-medium">
+          <p className="text-sm sm:text-base md:text-xl lg:text-2xl mt-3 text-white/90 font-medium animate-fadeIn delay-150">
             Safe • Comfortable • Affordable — Just Like Home
           </p>
 
-          {/* Search bar */}
-          <div className="mt-8 w-full max-w-xl sm:max-w-2xl">
-            <div className="flex items-center bg-white/15 px-4 py-3 rounded-full backdrop-blur-lg border border-white/20 shadow-lg">
+          {/* Search Bar */}
+          <div className="w-full max-w-xl sm:max-w-2xl mt-8 animate-slideUp">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full px-3 py-2 sm:px-4 sm:py-3 shadow-lg">
               <input
                 type="text"
                 placeholder="Search by city, landmark or property..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleFindPG()}
-                className="flex-1 bg-transparent text-white placeholder-white/60 outline-none text-base"
+                className="flex-1 bg-transparent text-white placeholder-white/60 px-2 sm:px-4 py-2 text-sm sm:text-base focus:outline-none"
               />
 
               <button
                 onClick={handleFindPG}
-                className="bg-blue-600 hover:bg-blue-700 px-6 py-2 text-white rounded-full text-sm sm:text-lg transition shadow-lg"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-all text-sm sm:text-lg font-semibold"
               >
                 Search
               </button>
             </div>
 
             {searchError && (
-              <p className="text-red-300 text-sm mt-2">{searchError}</p>
+              <p className="text-red-300 text-sm mt-2 text-center">{searchError}</p>
             )}
           </div>
         </div>
-      </section>
+      </div>
 
-
-      {/* ---------------------------------------------------- */}
-      {/* PG LISTING SECTION */}
-      {/* ---------------------------------------------------- */}
-      <div className="max-w-7xl mx-auto px-4 py-14">
-
-        <h2 className="text-3xl font-bold mb-8 text-gray-900">Available Rooms & PGs</h2>
-
+     <div className="max-w-7xl mx-auto py-10 sm:py-16">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-gray-900">Available Rooms & PGs</h2>
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
             {pgData.length > 0 ? pgData.map((pg) => (
               <div
                 key={pg._id}
                 onClick={() => navigate(`/pg/${pg._id}`)}
-                className="cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300"
+                className="cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="relative h-52">
+                {/* Image */}
+                <div className="relative">
                   <img
                     src={pg?.roomImages?.[0]}
-                    className="w-full h-full object-cover"
+                    alt={pg?.branch?.name}
+                    className="h-48 sm:h-56 w-full object-cover"
                   />
-
+                  {/* Heart Icon */}
                   <div
-                    className="absolute top-3 right-3"
                     onClick={(e) => e.stopPropagation()}
+                    className="absolute top-3 right-3"
                   >
                     <WishlistButton pg={pg} onAuthOpen={() => setIsAuthModalOpen(true)} />
                   </div>
-
-                  <span className="absolute bottom-3 left-3 bg-black/60 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                  {/* Category Tag */}
+                  <span
+                    className={`absolute bottom-3 left-3 px-3 py-1 text-xs rounded-full shadow font-medium 
+                      ${pg?.category === "Pg" ? "bg-blue-100 text-blue-700" : ""}
+                      ${pg?.category === "Room" ? "bg-green-100 text-green-700" : ""}
+                      ${pg?.category === "Hotel" ? "bg-purple-100 text-purple-700" : ""}`}
+                  >
                     {pg?.category}
                   </span>
                 </div>
 
-                <div className="p-4 space-y-2">
-                  <h3 className="text-lg font-semibold">{pg?.branch?.name} – Room {pg?.roomNumber}</h3>
-
-                  <p className="text-gray-500 text-sm">📍 {pg?.branch?.address}</p>
-
-                  <p className={`text-xs font-semibold ${pg.verified ? 'text-green-600' : 'text-red-500'}`}>
-                    {pg.verified ? '✔ Verified Host' : '⛔ Not Verified'}
+                {/* Content */}
+                <div className="p-4 sm:p-5 space-y-2 sm:space-y-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                    {pg?.branch?.name} – Room {pg?.roomNumber}
+                  </h3>
+                  <p className="text-gray-500 text-xs sm:text-sm flex items-center gap-1 leading-relaxed">
+                    📍 {pg?.branch?.address || pg?.branch?.location?.address}
                   </p>
 
-                  <div className="mt-3 flex justify-between items-center">
-                    <p className="text-xl font-bold text-gray-900">
-                      {pg.category === "Pg" ||
-                      pg.category === "Rented-Room"
-                        ? `₹${pg.price}/month`
-                        : `₹${pg.rentperNight}/night`}
+                  {/* Feature Chips */}
+                  <div className="flex flex-wrap gap-1 sm:gap-2 mt-1 sm:mt-2">
+                    {pg?.facilities?.slice(0, 3).map((f, idx) => {
+                      const colors = [
+                        "bg-blue-100 text-blue-700",
+                        "bg-green-100 text-green-700",
+                        "bg-purple-100 text-purple-700",
+                        "bg-pink-100 text-pink-700",
+                        "bg-yellow-100 text-yellow-700",
+                      ];
+                      return (
+                        <span
+                          key={idx}
+                          className={`text-xs sm:text-sm px-2 py-1 rounded-full shadow-sm font-medium ${colors[idx % colors.length]}`}
+                        >
+                          {f}
+                        </span>
+                      );
+                    })}
+                    {pg?.facilities?.length > 3 && (
+                      <span className="text-xs sm:text-sm text-gray-400 font-medium">+ {pg.facilities.length - 3} more</span>
+                    )}
+                  </div>
+
+                  <p className={`text-xs sm:text-sm font-semibold mt-1 ${pg.verified ? "text-green-600" : "text-red-500"}`}>
+                    {pg.verified ? "✔ Verified Host" : "⛔ Not Verified"}
+                  </p>
+
+                  <div className="mt-3 sm:mt-4 flex justify-between items-center">
+                    <p className="text-lg sm:text-xl font-bold text-gray-900">
+                      {pg?.category === "Pg" || pg.category === "Rented-Room"
+                        ? `₹${pg?.price}/month`
+                        : `₹${pg?.rentperNight}/night`}
                     </p>
+                    <p className="text-xs sm:text-sm text-gray-500 font-medium">
+                      {pg.category === "Pg" ? (
+                        `${pg.occupied}/${pg.occupied+pg.vacant} occupied`
+                      ) : pg.category === "Hotel" ? (
+                        `${pg.occupied}/${1} occupied`
+                      ) : pg.category === "Rented-Room" ? (
+                        pg.renttype === "Flat-Rent" ? (
+                          `${pg.occupied}/${1} occupied`
+                        ) : pg.renttype === "Room-Rent" ? (
+                          `${pg.occupied}/${1} occupied`
+                        ) : (
+                          ""
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </p>
+
+
                   </div>
                 </div>
               </div>
             )) : (
-              <p className="text-center col-span-full text-gray-500">No Rooms Available</p>
+              <div className="col-span-full text-center py-12 text-gray-500 text-lg">
+                No Rooms Available
+              </div>
             )}
-
           </div>
         )}
       </div>
 
-
-      {/* ---------------------------------------------------- */}
       {/* POPULAR CITIES */}
-      {/* ---------------------------------------------------- */}
-      <section className="w-full py-16 bg-gradient-to-b from-white via-gray-50 to-gray-100 text-center">
+      <section className="w-full py-12 sm:py-16 bg-gradient-to-b from-white/70 via-white/60 to-white/50 backdrop-blur-sm text-center rounded-3xl shadow-lg px-2 sm:px-6 mx-auto max-w-7xl">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">Rooms in Popular Cities</h2>
+        <p className="text-gray-600 mb-8 sm:mb-10">Choose your city and discover the best rooms near you.</p>
 
-        <h2 className="text-3xl font-bold mb-3">Rooms in Popular Cities</h2>
-        <p className="text-gray-600 mb-10">Choose your city and discover the best rooms near you.</p>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-5xl mx-auto">
-          {["Delhi", "Noida", "Gurgaon", "Bangalore", "Chennai", "Hyderabad", "Pune", "Mumbai"].map(city => (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full max-w-6xl mx-auto">
+          {["Delhi", "Noida", "Gurgaon", "Bangalore", "Chennai", "Hyderabad", "Pune", "Mumbai"].map((city) => (
             <button
               key={city}
               onClick={() => toast.success(`We are coming soon in ${city}`)}
-              className="bg-white shadow-md rounded-xl py-4 text-sm font-semibold hover:shadow-xl transition"
+              className="bg-white shadow-md rounded-xl p-3 sm:p-5 text-sm sm:text-base font-semibold cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
             >
               {city}
             </button>
@@ -188,11 +261,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-
-      {/* AUTH MODAL */}
-      {isAuthModalOpen && (
-        <AuthModal onClose={() => setIsAuthModalOpen(false)} />
-      )}
+      {isAuthModalOpen && <AuthModal onClose={() => setIsAuthModalOpen(false)} />}
     </div>
   );
 }
