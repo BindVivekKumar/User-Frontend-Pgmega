@@ -330,11 +330,18 @@ export default function PGDetailsPage() {
                       <p className="text-3xl font-extrabold text-red-600 drop-shadow-sm">{pg.occupied || "0"}</p>
                     </div>
 
-                    <div className="flex flex-col items-center backdrop-blur-xl bg-white/40 px-6 py-3 rounded-2xl shadow-lg border border-white/30">
+               <div className="flex flex-col items-center backdrop-blur-xl bg-white/40 px-6 py-3 rounded-2xl shadow-lg border border-white/30">
                       <span className="text-sm font-medium text-gray-600">Vacant</span>
-                      <p className="text-3xl font-extrabold text-green-600 drop-shadow-sm">
-                        {Math.max(0, pg.vacant - pg.occupied)}
-                      </p>
+
+                      {pg?.category === "Pg" ? (
+                        <p className="text-3xl font-extrabold text-green-600 drop-shadow-sm">
+                          {pg.vacant}
+                        </p>
+                      ) : (
+                        <p className="text-3xl font-extrabold text-green-600 drop-shadow-sm">
+                          {Math.max(0, pg.vacant - pg.occupied)}
+                        </p>
+                      )}
                     </div>
 
 
