@@ -187,10 +187,7 @@ export default function LandingPage() {
       </section>
 
 
-      {/* GAP BEFORE FOOTER FOR CLEAN LOOK */}
-      <div className="h-10"></div>
-
-      <Footer />
+      
 
       {isAuthModalOpen && <AuthModal onClose={() => setIsAuthModalOpen(false)} />}
     </div>
