@@ -21,6 +21,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (pgApiData?.allrooms) setPgData(pgApiData.allrooms);
+
     if (wishlistData?.data) {
       const ids = wishlistData.data.map(item => item.pgId);
       setWishlistIds(ids);
@@ -49,22 +50,23 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white">
 
       {/* ---------------------------------------------------- */}
-      {/* 🔥 FULL WIDTH HERO SECTION */}
+      {/* 🔥 FULL WIDTH HERO SECTION (CLICK FIXED) */}
       {/* ---------------------------------------------------- */}
-      <section className="relative w-full h-[450px] sm:h-[550px] md:h-[600px] overflow-hidden">
+      <section className="relative -z-10 w-full h-[450px] sm:h-[550px] md:h-[600px] overflow-hidden">
+
 
         {/* Background Image */}
         <img
           src="https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1260"
           alt="Room"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] pointer-events-none"></div>
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center text-white">
+        {/* Foreground Content (clickable) */}
+        <div className="relative z-10 pointer-events-auto flex flex-col items-center justify-center h-full px-4 text-center text-white">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight drop-shadow-xl">
             Find Your Perfect Stay
           </h1>
@@ -104,7 +106,7 @@ export default function LandingPage() {
       {/* ---------------------------------------------------- */}
       {/* PG LISTING SECTION */}
       {/* ---------------------------------------------------- */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-14">
 
         <h2 className="text-3xl font-bold mb-8 text-gray-900">Available Rooms & PGs</h2>
 
@@ -146,7 +148,7 @@ export default function LandingPage() {
                     {pg.verified ? '✔ Verified Host' : '⛔ Not Verified'}
                   </p>
 
-                  <div className="flex justify-between items-center mt-3">
+                  <div className="mt-3 flex justify-between items-center">
                     <p className="text-xl font-bold text-gray-900">
                       {pg.category === "Pg" ||
                       pg.category === "Rented-Room"
@@ -187,9 +189,10 @@ export default function LandingPage() {
       </section>
 
 
-      
-
-      {isAuthModalOpen && <AuthModal onClose={() => setIsAuthModalOpen(false)} />}
+      {/* AUTH MODAL */}
+      {isAuthModalOpen && (
+        <AuthModal onClose={() => setIsAuthModalOpen(false)} />
+      )}
     </div>
   );
 }

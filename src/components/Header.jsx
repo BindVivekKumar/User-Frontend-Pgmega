@@ -8,7 +8,6 @@ import { userLoggedout, hydrateUser } from "../Bothfeatures/features/authSlice";
 import { toast } from "react-toastify";
 
 export default function Header() {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -20,6 +19,9 @@ export default function Header() {
 
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
+
+  // ⭐ SCROLL-LOCK FIX
+  const lockRef = useRef(false);
 
   // Hydrate user from localStorage
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close mobile menu when clicking outside
+  // Close mobile menu on outside click
   useEffect(() => {
     const closeMobileOnOutsideClick = (e) => {
       if (
@@ -65,18 +67,19 @@ export default function Header() {
     return () => document.removeEventListener("click", closeMobileOnOutsideClick);
   }, [mobileMenu]);
 
-  // ✅ FIX: Close mobile menu on scroll or swipe (touchmove)
+  // ⭐ FINAL FIX: Close on scroll ONLY when not tapping the button
   useEffect(() => {
-    const closeOnScroll = () => {
+    const handleScroll = () => {
+      if (lockRef.current) return; // Skip scroll-close during tap
       if (mobileMenu) setMobileMenu(false);
     };
 
-    window.addEventListener("scroll", closeOnScroll);
-    window.addEventListener("touchmove", closeOnScroll);
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("touchmove", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", closeOnScroll);
-      window.removeEventListener("touchmove", closeOnScroll);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("touchmove", handleScroll);
     };
   }, [mobileMenu]);
 
@@ -187,7 +190,11 @@ export default function Header() {
         {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden ml-3 mobile-menu-btn"
-          onClick={() => setMobileMenu((prev) => !prev)}
+          onClick={() => {
+            lockRef.current = true; // prevent scroll-close
+            setTimeout(() => (lockRef.current = false), 250);
+            setMobileMenu((prev) => !prev);
+          }}
         >
           <Menu className="w-8 h-8" />
         </button>
